@@ -10,8 +10,8 @@
                 <a class="btn btn-default DTTT_button_text" id="ToolTables_crudtable_0"href="/tes/del"><i class="ti ti-plus"></i> <span>Mess</span></a>
             </div> --}}
             
-            <form action="" class="form-horizontal row-border" method="POST">
-                @method('PUT')
+            <form action="/transaksi/detail/tambah" class="form-horizontal row-border" method="POST">
+                {{-- @method('PUT') --}}
                 @csrf
                 <div class="form-group">
                     <label class="col-md-3 control-label mr-3">Kode Transaksi</label>
@@ -23,8 +23,10 @@
                     <label class="col-md-3 control-label">Kode Agen/Nama Agens</label>
                     <div class="col-md-6">
                         <select class="form-control" name="kode_agen" id="source" readonly>
-                                
-                                <option value="">{{$ngeng->nama_agen}}</option>
+                                @foreach ($waro as $item)
+                                    
+                                <option value="">{{$item->nama_agen}}</option>
+                                @endforeach
                         </select>
                     </div>
                 </div>
@@ -53,9 +55,13 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label">Tambah Parfum</label>
                     <div class="col-md-6">
-                        <select class="form-control" name="valid" id="source">
-                            <option value="0"></option>
-                            <option value="1"></option>
+                        <select class="form-control" name="kode_barang" id="source">
+                            @forelse ($par as $kol)
+                            <option value="{{$kol->kode_barang}}">{{$kol->nama_barang}}</option>    
+                            @empty
+                            <option value="">Kosong</option>
+                            @endforelse
+                            
                         </select>
                     </div>
                 </div>
@@ -63,7 +69,7 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label mr-3">Jumlah</label>
                     <div class="col-md-6">
-                        <input type="text" name="kode_transaksi"class="form-control" value="">
+                        <input type="text" name="jumlah"class="form-control" value="">
                     </div>
                 </div>
                 <div class="row">
@@ -86,11 +92,22 @@
                                 </tr>
                             </thead>
                             <tbody class="text-center">
+                                @forelse ($det as $ho)
                                 <tr>
-                                    <td>1</td>
-                                    <td>Nyambek Ngaceng</td>
-                                    <td>Pusat</td>
-                                    <td>10</td> 
+                                    
+                                    <td>{{ $loop->iteration}}</td>
+                                    <td>{{ $ho->nama_barang}}</td>
+                                    <td>{{ $ho->nama_agen }}</td>
+                                    <td>{{ $ho->jumlah}}</td>
+                                </tr>     
+                                    @empty
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td> 
+                                    @endforelse
+                                    
                                 </tr>
                                 {{-- @empty
                                     <tr>
@@ -102,16 +119,37 @@
                         <!--end table-->
                         
                     </div>
-
-                    <br>
-                    <div class="row">
-                        <div class="col-sm-8 col-sm-offset-2">
-                            <button name="simpan" type="submit" class="btn btn-primary">Validasi</button>
-                        </div>
-                    </div>
                 </div>
-
             </form>
+            @if ($ngeng->jenis == "Masuk")
+            <form action={{ url('/transaksi/detail/masuk/'.$ngeng->kode_transaksi) }} method="POST">
+                @csrf
+                <div class="col-md-6">
+                    <input  type="hidden" name="kode_transaksi"class="form-control" value="{{ $ngeng->kode_transaksi }}">
+                </div>
+                <br>
+                        <div class="row">
+                            <div class="col-sm-8 col-sm-offset-2">
+                                <button name="simpan" type="submit" class="btn btn-primary">Validasi</button>
+                            </div>
+                        </div>
+            </form>
+            @elseif($ngeng->jenis == "Setor")
+            <form action={{ url('/transaksi/detail/setor/'.$ngeng->kode_transaksi) }} method="POST">
+                @csrf
+                <div class="col-md-6">
+                    <input  type="hidden" name="kode_transaksi"class="form-control" value="{{ $ngeng->kode_transaksi }}">
+                </div>
+                <br>
+                        <div class="row">
+                            <div class="col-sm-8 col-sm-offset-2">
+                                <button name="simpan" type="submit" class="btn btn-primary">Validasi</button>
+                            </div>
+                        </div>
+            </form>
+            @else
+                
+            @endif
     </div>
 </div>
 @push('date')

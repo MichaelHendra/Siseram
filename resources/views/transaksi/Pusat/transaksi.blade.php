@@ -46,7 +46,7 @@
                             
                            @if ($t->valid==0)
                            <td >
-                            <a href="/transaksi/edit/{{ $t->kode_transaksi }}" class="btn btn-warning btn-label d-inline"><i class="ti ti-pencil-alt"></i><span>Edit</span></a>
+                            <a href="/transaksi/detail/{{ $t->kode_transaksi }}" class="btn btn-warning btn-label d-inline"><i class="ti ti-pencil-alt"></i><span>Edit</span></a>
                            </td>
                            @else
                            <td>Sudah Divalidasi</td>

@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/register', [Auth_Controller::class, 'register'])->name('register');
     Route::post('/register', [Auth_Controller::class, 'registerPost'])->name('register');
-    Route::get('/login', [Auth_Controller::class, 'login'])->name('login');
+    Route::get('/', [Auth_Controller::class, 'login'])->name('login');
     Route::post('/loginproses', [Auth_Controller::class, 'loginPost'])->name('loginProses');
 });
 
@@ -57,10 +57,18 @@ Route::get('/stok/destroy/{id}', [StokController::class, 'destroy']);
 //transksi Pusat
 Route::get('/transaksi', [TransaksiPusat::class, 'index']);
 Route::get('/transaksi/detail/{id}',[DetailController::class,'detailTapil']);
+Route::post('/transaksi/detail/tambah',[DetailController::class,'detailProses']);
 Route::get('/transaksi/tambah', [TransaksiPusat::class, 'create']);
 Route::post('/transaksi/store', [TransaksiPusat::class, 'store']);
-Route::get('/transaksi/edit/{id}', [TransaksiPusat::class, 'edit']);
-Route::put('/transaksi/update/{id}', [TransaksiPusat::class, 'update']);
+
+
+Route::post('/transaksi/detail/masuk/{id}',[DetailController::class,'detailmasuk']);
+Route::post('/transaksi/detail/setor/{id}',[DetailController::class,'detailsetor']);
+Route::post('/transaksi/detail/retur/{id}',[DetailController::class,'detailretur']);
+//transaksi Agen
+
+// Route::get('/transaksi/edit/{id}', [TransaksiPusat::class, 'edit']);
+// Route::put('/transaksi/update/{id}', [TransaksiPusat::class, 'update']);
 //report
 Route::get('/lapor/stok',[StokController::class,'stokTampil']);
 Route::post('/lapor/stok/agen',[StokController::class,'stokAgen']);
