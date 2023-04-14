@@ -65,7 +65,6 @@
                         </select>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label class="col-md-3 control-label mr-3">Jumlah</label>
                     <div class="col-md-6">
@@ -76,7 +75,7 @@
                     <div class="col-sm-8 col-sm-offset-2">
                         <button name="simpan" type="submit" class="btn btn-primary">Tambah Barang</button>
                     </div>
-                </div>
+                </div> 
 
                 <div class="panel-footer">
 

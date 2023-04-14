@@ -12,7 +12,7 @@
                 @enderror">
                     <label class="col-md-3 control-label">Kode Barang</label>
                     <div class="col-md-6">
-                        <input disabled type="text" name="kode_barang"class="form-control"required autofocus value="{{ old('kode_barang') }}">
+                        <input type="text" name="kode_barang"class="form-control"required autofocus value="{{ old('kode_barang') }}">
                     </div>
                 @error('kode_barang')
                 <div class="col-md-3">

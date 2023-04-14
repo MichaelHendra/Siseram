@@ -9,8 +9,8 @@ class Detail extends Model
 {
     use HasFactory;
     protected $table = 'tb_transaksi_detail';
-    protected $primaryKey = 'kode_barang';
-    public $incrementing = false;
+    protected $primaryKey = 'kode_detail';
+    public $incrementing = true;
     protected $fillable = ['kode_detail', 'kode_transaksi', 'kode_barang', 'jumlah'];
     public $timestamps = true;
 }
