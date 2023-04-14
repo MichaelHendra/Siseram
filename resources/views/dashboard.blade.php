@@ -5,7 +5,7 @@
 		<div class="info-tile tile-orange">
 			<div class="tile-icon"><i class="ti ti-shopping-cart-full"></i></div>
 			<div class="tile-heading"><span>Orders</span></div>
-			<div class="tile-body"><span>2,150</span></div>
+			<div class="tile-body"><span>2,151</span></div>
 			<div class="tile-footer"><span class="text-success">22.5% <i class="fa fa-level-up"></i></span></div>
 		</div>
 	</div>
