@@ -120,35 +120,18 @@
                     </div>
                 </div>
             </form>
-            @if ($ngeng->jenis == "Masuk")
             <form action={{ url('/transaksi/detail/masuk/'.$ngeng->kode_transaksi) }} method="POST">
                 @csrf
                 <div class="col-md-6">
                     <input  type="hidden" name="kode_transaksi"class="form-control" value="{{ $ngeng->kode_transaksi }}">
                 </div>
                 <br>
-                        <div class="row">
-                            <div class="col-sm-8 col-sm-offset-2">
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2">
                                 <button name="simpan" type="submit" class="btn btn-primary">Validasi</button>
-                            </div>
                         </div>
+                    </div>
             </form>
-            @elseif($ngeng->jenis == "Setor")
-            <form action={{ url('/transaksi/detail/setor/'.$ngeng->kode_transaksi) }} method="POST">
-                @csrf
-                <div class="col-md-6">
-                    <input  type="hidden" name="kode_transaksi"class="form-control" value="{{ $ngeng->kode_transaksi }}">
-                </div>
-                <br>
-                        <div class="row">
-                            <div class="col-sm-8 col-sm-offset-2">
-                                <button name="simpan" type="submit" class="btn btn-primary">Validasi</button>
-                            </div>
-                        </div>
-            </form>
-            @else
-                
-            @endif
     </div>
 </div>
 @push('date')
