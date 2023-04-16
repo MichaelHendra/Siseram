@@ -29,7 +29,7 @@ Route::group(['middleware' => 'guest'], function () {
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', [Dashboard_Controller::class, 'dashboardT']);
-    Route::delete('/logout', [Auth_Controller::class, 'logout'])->name('logout');
+    Route::get('/logout', [Auth_Controller::class, 'logout'])->name('logout');
 //setting->agen
     Route::get('/agen', [AgenController::class, 'index']);
     Route::get('/agen/tambah', [AgenController::class, 'create']);

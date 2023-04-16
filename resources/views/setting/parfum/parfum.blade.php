@@ -14,9 +14,9 @@
                     <a class="btn btn-default DTTT_button_text" id="ToolTables_crudtable_0"href="/parfum/tambah"><i class="ti ti-plus"></i> <span>New</span></a>
                     </div>
                     {{-- Mess Button --}}
-                    <div class="DTTT btn-group pull-left mt-sm mr-3">
+                    {{-- <div class="DTTT btn-group pull-left mt-sm mr-3">
                         <a class="btn btn-default DTTT_button_text" id="ToolTables_crudtable_0"href="/parfum/mess"><i class="ti ti-plus"></i> <span>Mess</span></a>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
             <div class="panel-body no-padding">
