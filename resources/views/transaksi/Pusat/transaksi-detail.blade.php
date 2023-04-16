@@ -65,7 +65,6 @@
                         </select>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label class="col-md-3 control-label mr-3">Jumlah</label>
                     <div class="col-md-6">
@@ -76,7 +75,7 @@
                     <div class="col-sm-8 col-sm-offset-2">
                         <button name="simpan" type="submit" class="btn btn-primary">Tambah Barang</button>
                     </div>
-                </div>
+                </div> 
 
                 <div class="panel-footer">
 
@@ -120,36 +119,46 @@
                         
                     </div>
                 </div>
+              
+                
             </form>
-            @if ($ngeng->jenis == "Masuk")
+            {{-- <form action="" method="POST">
+                @csrf
+                <div class="col-md-6">
+                    <input  type="hidden" name="kode_transaksi"class="form-control" value="{{ $ngeng->kode_transaksi }}">
+                </div>
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <button class=" btn btn-primary btn-label btn-delete" data-toggle="tooltip" data-deleteid="{{ $ngeng->kode_transaksi }}" title='Delete'><i class="ti ti-trash"></i><span>Validasi</span></button>
+                    </div>
+                </div>
+            </form> --}}
+            {{-- COba alert --}}
+            {{-- <form action={{ url('/transaksi/detail/masuk/'.$ngeng->kode_transaksi) }} method="POST">
+                @csrf
+                <div class="col-md-6">
+                    <input  type="hidden" name="kode_transaksi"class="form-control" value="{{ $ngeng->kode_transaksi }}">
+                </div>
+                <br>
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2">
+                                <button name="simpan" type="submit" class="btn btn-primary" data-deleteid="{{ $ngeng->kode_transaksi }}">Validasi</button>
+                        </div>
+                    </div>
+            </form> --}}
             <form action={{ url('/transaksi/detail/masuk/'.$ngeng->kode_transaksi) }} method="POST">
                 @csrf
                 <div class="col-md-6">
                     <input  type="hidden" name="kode_transaksi"class="form-control" value="{{ $ngeng->kode_transaksi }}">
                 </div>
                 <br>
-                        <div class="row">
-                            <div class="col-sm-8 col-sm-offset-2">
-                                <button name="simpan" type="submit" class="btn btn-primary">Validasi</button>
-                            </div>
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2">
+                                <button name="simpan" type="submit" class="btn btn-primary btn-delete" data-toggle="tooltip" title='Delete'>Validasi</button>
                         </div>
+                    </div>
             </form>
-            @elseif($ngeng->jenis == "Setor")
-            <form action={{ url('/transaksi/detail/setor/'.$ngeng->kode_transaksi) }} method="POST">
-                @csrf
-                <div class="col-md-6">
-                    <input  type="hidden" name="kode_transaksi"class="form-control" value="{{ $ngeng->kode_transaksi }}">
-                </div>
-                <br>
-                        <div class="row">
-                            <div class="col-sm-8 col-sm-offset-2">
-                                <button name="simpan" type="submit" class="btn btn-primary">Validasi</button>
-                            </div>
-                        </div>
-            </form>
-            @else
-                
-            @endif
+                            
     </div>
 </div>
 @push('date')
@@ -166,6 +175,30 @@
             });
         });
     </script>
-        
+@endpush
+@push('alert')
+<script>
+    $(".btn-delete").click(function(e) {
+    var form = $(this).closest("form");
+    var name = $(this).data("name");
+    e.preventDefault();
+    swal({
+      title: 'Yakin ingin Validasi data?',
+      text: 'Data ini akan divalidasi.Setelah itu,data tidak bisa diubah/dihapus',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willValid) => {
+      if (willValid) {
+        form.submit();
+      } else {
+        swal('Proses Validasi dibatalkan');
+      }
+    });
+  });
+  
+  
+  </script>
 @endpush
 @endsection

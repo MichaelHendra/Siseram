@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tb_transaksi_detail', function (Blueprint $table) {
-            $table->string('kode_detail')->primary();
+            $table->id('kode_detail');
             $table->string('kode_transaksi');
             $table->string('kode_barang');
-            $table->string('jumlah');
+            $table->integer('jumlah');
             $table->timestamps();
         });
     }

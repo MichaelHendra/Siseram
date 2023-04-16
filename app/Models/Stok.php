@@ -10,7 +10,7 @@ class Stok extends Model
     use HasFactory;
     protected $table = 'tb_stok';
     protected $primaryKey = 'kode_stok';
-    public $incrementing = false;
+    public $incrementing = true;
     protected $fillable = ['kode_stok', 'kode_agen', 'kode_barang', 'jumlah'];
     public $timestamps = true;
 }

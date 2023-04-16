@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Agen;
 use App\Models\Transaksi;
 use Carbon\Carbon;
@@ -11,18 +12,20 @@ class TransaksiPusat extends Controller
 {
     public function index()
     {
-        $transact = Transaksi::join('tb_agen','tb_transaksi.kode_agen','=','tb_agen.kode_agen')
-        ->Where('tb_agen.status','=','1')
-        ->select('tb_transaksi.*','tb_agen.nama_agen')
-        ->get();
+        $transact = Transaksi::join('tb_agen', 'tb_transaksi.kode_agen', '=', 'tb_agen.kode_agen')
+            ->Where('tb_agen.status', '=', '1')
+            ->select('tb_transaksi.*', 'tb_agen.nama_agen')
+            ->paginate(10)->onEachSide(1);
+
         return view('transaksi.Pusat.transaksi', [
             'transact' => $transact,
+
         ]);
 
     }
     public function create()
     {
-        $agen = Agen::Where('status','=','1')->get();
+        $agen = Agen::Where('status', '=', '1')->get();
         // dd($agen);
         return view('transaksi.Pusat.transaksi-entry', [
             'agen' => $agen,
@@ -31,7 +34,7 @@ class TransaksiPusat extends Controller
     public function store(Request $request)
     {
         // $id = $this->dateToDB();
-        
+
         // dd($request->all());
         $this->validate($request, [
 
@@ -58,7 +61,7 @@ class TransaksiPusat extends Controller
     public function edit(string $id)
     {
         $transact = Transaksi::find($id);
-        $agen = Agen::Where('status','=','1')->get();
+        $agen = Agen::Where('status', '=', '1')->get();
         $dateFromField = $transact->tanggal;
         $date = Carbon::parse($dateFromField)->format('d/m/Y');
         // dd($date);

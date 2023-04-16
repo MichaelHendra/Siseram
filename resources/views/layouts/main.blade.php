@@ -71,18 +71,19 @@
 				<ul class="dropdown-menu userinfo arrow">
 					<li><a href="#/"><i class="ti ti-user"></i><span>Profile</span></a></li>
 					<li><a href="#/"><i class="ti ti-settings"></i><span>Settings</span></a></li>
-					<form action="{{ route('logout') }}" method="POST" class="d-flex" role="search">
+					{{-- <form action="{{ route('logout') }}" method="POST" class="d-flex" role="search">
 						@csrf
 						@method('DELETE')
 						<button <i class="ti ti-shift-right" type="submit"></i>Logout</button>
-					</form>
+					</form> --}}
+				<li><a href="{{ route('logout') }}"><i class="ti ti-shift-right"></i><span>Logout</span></a></li>
 				</ul>
 			</li>
 
 		</ul>
 
 	</header>
-
+	
 	<div id="wrapper">
 		<div id="layout-static">
 			<div class="static-sidebar-wrapper sidebar-default">
@@ -96,8 +97,7 @@
 											class="img-responsive img-circle">
 									</div>
 									<div class="info">
-										<span class="username">Jonathan Smith</span>
-										<span class="useremail">jon@avenxo.com</span>
+										<span class="username">Hi,{{ Auth::user()->username}}</span>
 									</div>
 								</div>
 							</div>

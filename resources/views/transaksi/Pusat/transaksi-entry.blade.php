@@ -28,7 +28,7 @@
                 <div class="form-group">
                     <label for="dtp-1" class="col-md-3 control-label">Tanggal</label>
                     <div class="col-sm-8">
-                        <input class="form-control datepicker" name="tanggal"type="text" id="dtp-1">
+                        <input class="form-control datepicker" name="tanggal"type="text" id="dtp-1"autocomplete="off">
                     </div>
                 </div>
                 <div class="form-group">

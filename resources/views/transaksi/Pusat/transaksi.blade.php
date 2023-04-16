@@ -30,10 +30,13 @@
                         </tr>
                     </thead>
                     <tbody class="text-center">
+                        @php
+                            $no=1+(($transact->currentPage()-1)*$transact->perPage()); 
+                        @endphp
                         @forelse ($transact as $t)
-                        
+                         
                         <tr>
-                            <td>{{ $loop->iteration}}</td>
+                            <td>{{ $no++}}</td>
                             <td>{{ $t->kode_transaksi }}</td>
                             <td>{{ $t->nama_agen }}</td>
                             <td class="date" data-date="{{ $t->tanggal }}">{{ $t->tanggal}}</td>
@@ -61,7 +64,7 @@
                     </tbody>
                 </table>
                 <!--end table-->
-                
+                {{ $transact->links() }}
             </div>
         </div>
     </div>
