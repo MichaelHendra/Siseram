@@ -68,6 +68,10 @@ Route::group(['middleware' => 'auth'], function () {
 // Route::get('/transaksi/edit/{id}', [TransaksiPusat::class, 'edit']);
 // Route::put('/transaksi/update/{id}', [TransaksiPusat::class, 'update']);
 //report
+    Route::get('/lapor/transaksi',[TransaksiPusat::class,'laporTampil']);
+    Route::post('/lapor/transaksi',[TransaksiPusat::class,'laporTproses']);
+    Route::get('/lapor/transaksi/cetak',[TransaksiPusat::class,'laporCetak']);
     Route::get('/lapor/stok', [StokController::class, 'stokTampil']);
     Route::post('/lapor/stok/agen', [StokController::class, 'stokAgen']);
+    Route::get('/lapor/stok/cetak',[StokController::class,'laporCetak']);
 });

@@ -125,7 +125,7 @@
 									
 									<li><a href="javascript:;"><i class="ti ti-file"></i><span>Report</span></a>
 										<ul class="acc-menu">
-											<li><a href="/">Transaksi</a></li>
+											<li><a href="/lapor/transaksi">Transaksi</a></li>
 											<li><a href="/lapor/stok">Stok</a></li>
 											
 										</ul>
