@@ -62,7 +62,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/transaksi/detail/masuk/{id}', [DetailController::class, 'detailmasuk']);
     Route::post('/transaksi/detail/setor/{id}', [DetailController::class, 'detailsetor']);
     Route::post('/transaksi/detail/retur/{id}', [DetailController::class, 'detailretur']);
-    
+
 //transaksi Agen
 
 // Route::get('/transaksi/edit/{id}', [TransaksiPusat::class, 'edit']);
