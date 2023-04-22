@@ -20,14 +20,13 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-3 control-label">Kode Agen/Nama Agens</label>
+                    <label class="col-md-3 control-label">Kode Agen/Nama Agen</label>
                     <div class="col-md-6">
-                        <select class="form-control" name="kode_agen" id="source" readonly>
-                                @foreach ($waro as $item)
-                                    
-                                <option value="">{{$item->nama_agen}}</option>
-                                @endforeach
-                        </select>
+                        @if ($ngeng->valid==1)
+                            <input class="form-control" name="kode_agen"type="text" id="dtp-1" value={{ $waro[0]->nama_agen }} readonly>
+                        @else
+                            <input class="form-control" name="kode_agen"type="text" id="dtp-1" value={{ $waro[0]->nama_agen }} readonly>
+                        @endif
                     </div>
                 </div>
                 {{-- <div class="form-group">
@@ -45,10 +44,11 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label">Valid</label>
                     <div class="col-md-6">
-                        <select class="form-control" name="valid" id="source" readonly>
-                            <option value="0">Tidak</option>
-                            <option value="1">Iya</option>
-                        </select>
+                        @if ($ngeng->valid==1)
+                        <input class="form-control" name="valid"type="text" id="dtp-1" value="Sudah Valid" readonly>
+                        @else
+                        <input class="form-control" name="valid"type="text" id="dtp-1" value="Belum Valid" readonly>
+                        @endif
                     </div>
                 </div>
 
@@ -61,26 +61,30 @@
                             @empty
                             <option value="">Kosong</option>
                             @endforelse
-                            
+
                         </select>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-md-3 control-label mr-3">Jumlah</label>
-                    <div class="col-md-6">
-                        <input type="text" name="jumlah"class="form-control" value="">
+                
+                @if ($ngeng->valid==0)
+                    <div class="form-group">
+                        <label class="col-md-3 control-label mr-3">Jumlah</label>
+                        <div class="col-md-6">
+                            <input type="text" name="jumlah"class="form-control" value="">
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-8 col-sm-offset-2">
-                        <button name="simpan" type="submit" class="btn btn-primary">Tambah Barang</button>
-                    </div>
-                </div> 
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2">
+                            <button name="simpan" type="submit" class="btn btn-primary">Tambah Barang</button>
+                        </div>
+                    </div> 
+                @endif
 
                 <div class="panel-footer">
 
                     <div class="panel-body no-padding">
-            
+                    @if ($ngeng->valid==0)
+                        
                         <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered datatables" id="crudtable">
                             <thead class="text-center">
                                 <tr>
@@ -88,6 +92,7 @@
                                     <th class="text-center" width="30%">Nama Barang</th>
                                     <th class="text-center" width="20%">Nama Agen</th>
                                     <th class="text-center" width="20%">Jumlah</th>
+                                    <th class="text-center" width="20%">Action</th>
                                 </tr>
                             </thead>
                             <tbody class="text-center">
@@ -98,6 +103,7 @@
                                     <td>{{ $ho->nama_barang}}</td>
                                     <td>{{ $ho->nama_agen }}</td>
                                     <td>{{ $ho->jumlah}}</td>
+                                    <td><a class=" btn btn-danger btn-label btn-delete"href="#" data-toggle="tooltip" data-trNum="{{ $ho->kode_transaksi }}" data-deleteName="{{ $ho->nama_barang }}" data-deleteid="{{ $ho->kode_barang }}" title='Delete'><i class="ti ti-trash"></i><span>Delete</span></a></td>
                                 </tr>     
                                     @empty
                                 <tr>
@@ -115,6 +121,42 @@
                                 @endforelse --}}
                             </tbody>
                         </table>
+                    @else
+                    <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered datatables" id="crudtable">
+                        <thead class="text-center">
+                            <tr>
+                                <th class="text-center" width="5%">No</th>
+                                <th class="text-center" width="30%">Nama Barang</th>
+                                <th class="text-center" width="20%">Nama Agen</th>
+                                <th class="text-center" width="20%">Jumlah</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center">
+                            @forelse ($det as $ho)
+                            <tr>
+                                
+                                <td>{{ $loop->iteration}}</td>
+                                <td>{{ $ho->nama_barang}}</td>
+                                <td>{{ $ho->nama_agen }}</td>
+                                <td>{{ $ho->jumlah}}</td>
+                            </tr>     
+                                @empty
+                            <tr>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td> 
+                                @endforelse
+                                
+                            </tr>
+                            {{-- @empty
+                                <tr>
+                                    <td colspan="6">Data Tidak ada</td>
+                                </tr>
+                            @endforelse --}}
+                        </tbody>
+                    </table>
+                    @endif
                         <!--end table-->
                         
                     </div>
@@ -122,42 +164,23 @@
               
                 
             </form>
-            {{-- <form action="" method="POST">
-                @csrf
-                <div class="col-md-6">
-                    <input  type="hidden" name="kode_transaksi"class="form-control" value="{{ $ngeng->kode_transaksi }}">
-                </div>
-                <div class="row">
-                    <div class="col-sm-8 col-sm-offset-2">
-                        <button class=" btn btn-primary btn-label btn-delete" data-toggle="tooltip" data-deleteid="{{ $ngeng->kode_transaksi }}" title='Delete'><i class="ti ti-trash"></i><span>Validasi</span></button>
+          
+           @if ($ngeng->valid==0)
+               
+                <form action={{ url('/transaksi/detail/masuk/'.$ngeng->kode_transaksi) }} method="POST">
+                    @csrf
+                    <div class="col-md-6">
+                        <input  type="hidden" name="kode_transaksi"class="form-control" value="{{ $ngeng->kode_transaksi }}">
                     </div>
-                </div>
-            </form> --}}
-            {{-- COba alert --}}
-            {{-- <form action={{ url('/transaksi/detail/masuk/'.$ngeng->kode_transaksi) }} method="POST">
-                @csrf
-                <div class="col-md-6">
-                    <input  type="hidden" name="kode_transaksi"class="form-control" value="{{ $ngeng->kode_transaksi }}">
-                </div>
-                <br>
-                    <div class="row">
-                        <div class="col-sm-8 col-sm-offset-2">
-                                <button name="simpan" type="submit" class="btn btn-primary" data-deleteid="{{ $ngeng->kode_transaksi }}">Validasi</button>
+                    <br>
+                        <div class="row">
+                            <div class="col-sm-8 col-sm-offset-2">
+                                    <button name="simpan" type="submit" class="btn btn-primary btn-valid" data-toggle="tooltip" title='Delete'>Validasi</button>
+                            </div>
                         </div>
-                    </div>
-            </form> --}}
-            <form action={{ url('/transaksi/detail/masuk/'.$ngeng->kode_transaksi) }} method="POST">
-                @csrf
-                <div class="col-md-6">
-                    <input  type="hidden" name="kode_transaksi"class="form-control" value="{{ $ngeng->kode_transaksi }}">
-                </div>
-                <br>
-                    <div class="row">
-                        <div class="col-sm-8 col-sm-offset-2">
-                                <button name="simpan" type="submit" class="btn btn-primary btn-delete" data-toggle="tooltip" title='Delete'>Validasi</button>
-                        </div>
-                    </div>
-            </form>
+                </form>
+          
+           @endif
                             
     </div>
 </div>
@@ -176,9 +199,9 @@
         });
     </script>
 @endpush
-@push('alert')
+@push('notif')
 <script>
-    $(".btn-delete").click(function(e) {
+    $(".btn-valid").click(function(e) {
     var form = $(this).closest("form");
     var name = $(this).data("name");
     e.preventDefault();
@@ -198,7 +221,38 @@
     });
   });
   
-  
   </script>
+@endpush
+@push('alert')
+<script>
+$(".btn-delete").click(function(e) {
+    var id=$(this).attr('data-deleteid');
+    var name=$(this).attr('data-deleteName');
+    var trNum=$(this).attr('data-trNum');
+    e.preventDefault();
+    swal({
+      title: 'Yakin ingin menghapus data?',
+      text: "Data dengan dengan nama :"+name+" akan dihapus ",
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    })
+    
+    .then((willDelete) => {
+      if (willDelete) {
+        window.location="/transaksi/detail/hapus/"+trNum+"/"+id+""
+        swal("Data anda berhasil dihapus", {
+          icon: "success",
+          });
+        // form.submit();
+        console.log(trNum);
+      } else {
+        swal('Proses Hapus dibatalkan');
+      }
+    });
+  });
+
+
+</script>
 @endpush
 @endsection

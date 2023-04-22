@@ -42,9 +42,9 @@
                             <td class="date" data-date="{{ $t->tanggal }}">{{ $t->tanggal}}</td>
                             <td>{{ $t->jenis }}</td>
                             @if ( $t->valid==0)
-                            <td><span class="label label-warning">Belum Valid</span></td>
+                                <td><span class="label label-warning">Belum Valid</span></td>
                             @else
-                            <td><span class="label label-success">Sudah Valid</span></td>
+                                <td><span class="label label-success">Sudah Valid</span></td>
                             @endif
                             
                            @if ($t->valid==0)
@@ -52,7 +52,9 @@
                             <a href="/transaksi/detail/{{ $t->kode_transaksi }}" class="btn btn-warning btn-label d-inline"><i class="ti ti-pencil-alt"></i><span>Edit</span></a>
                            </td>
                            @else
-                           <td>Sudah Divalidasi</td>
+                           <td >
+                            <a href="/transaksi/detail/{{ $t->kode_transaksi }}" class="btn btn-success btn-label d-inline"><i class="ti ti-pencil-alt"></i><span>Lihat</span></a>
+                           </td>
                            @endif
                             
                         </tr>

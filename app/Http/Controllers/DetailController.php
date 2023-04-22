@@ -12,6 +12,7 @@ class DetailController extends Controller
 {
     public function detailTapil(string $id)
     {
+
         $transact = Transaksi::find($id);
 
         $war = Transaksi::find($id)
@@ -28,7 +29,7 @@ class DetailController extends Controller
             ->join('tb_parfum', 'tb_transaksi_detail.kode_barang', '=', 'tb_parfum.kode_barang')
             ->join('tb_agen', 'tb_transaksi.kode_agen', '=', 'tb_agen.kode_agen')
             ->where('tb_transaksi.kode_transaksi', $id)
-            ->select('tb_parfum.nama_barang', 'tb_agen.nama_agen', 'tb_transaksi_detail.jumlah')
+            ->select('tb_transaksi.kode_transaksi', 'tb_parfum.nama_barang', 'tb_agen.nama_agen', 'tb_transaksi_detail.jumlah', 'tb_parfum.kode_barang')
             ->get();
         $idBarang = Detail::join('tb_transaksi', 'tb_transaksi.kode_transaksi', '=', 'tb_transaksi_detail.kode_transaksi')
             ->join('tb_parfum', 'tb_transaksi_detail.kode_barang', '=', 'tb_parfum.kode_barang')
@@ -43,9 +44,9 @@ class DetailController extends Controller
             'waro' => $war,
             'par' => $barang,
             'det' => $tol,
-            'id' => $idBarang,
-            'idBarang' => $barang[0]->kode_barang,
-            'idDetail' => $idBarangDetail,
+            // 'id' => $idBarang,
+            // 'idBarang' => $barang[0]->kode_barang,
+            // 'idDetail' => $idBarangDetail,
         ]);
     }
 
@@ -64,6 +65,13 @@ class DetailController extends Controller
         ]);
         return redirect('/transaksi/detail/' . $request->kode_transaksi)->with('success', 'Data berhasil ditambahkan');
 
+    }
+    public function detailDelete(string $trNum, string $id)
+    {
+        $detail = Detail::where('kode_transaksi', $trNum)->where('kode_barang', $id);
+        // dd([$detail, $trNum, $id]);
+        $detail->delete();
+        return redirect('/transaksi/detail/' . $trNum)->with('success', 'Data berhasil dihapus');
     }
 
     // public function validProses(Request $request)
@@ -99,20 +107,23 @@ class DetailController extends Controller
 
     public function detailmasuk(Request $request)
     {
+        $nyoba = Detail::select('kode_barang')->where('kode_transaksi', $request->kode_transaksi)->get();
 
         $detailPro = Detail::join('tb_transaksi', 'tb_transaksi.kode_transaksi', '=', 'tb_transaksi_detail.kode_transaksi')
             ->Where('tb_transaksi_detail.kode_transaksi', $request->kode_transaksi)
             ->select('tb_transaksi.kode_agen', 'tb_transaksi.jenis', 'tb_transaksi_detail.kode_barang', 'tb_transaksi_detail.jumlah')->get();
-        $cekStok = Stok::where('kode_barang', '=', $detailPro[0]->kode_barang)->exists();
+
         $stok = Stok::where('kode_barang', '=', $detailPro[0]->kode_barang)->select('kode_barang', 'jumlah')->get()->first();
         $tbStok = Stok::select('kode_agen')->get()->first();
         $trJenis = Transaksi::where('kode_transaksi', '=', $request->kode_transaksi)->select('jenis')->get()->first();
-        $errorStok = Parfum::where('kode_barang', $detailPro[0]->kode_barang)->select('nama_barang')->get()->first();
+
         // dd(is_null($tbStok));
         if ($trJenis->jenis == "Masuk") {
             foreach ($detailPro as $item) {
+
                 $cekStok = Stok::where('kode_barang', '=', $item->kode_barang)->exists();
                 $stok = Stok::where('kode_barang', '=', $item->kode_barang)->select('kode_barang', 'jumlah')->get()->first();
+
                 if (is_null($tbStok) || !$cekStok) { //tb stok kosong    //pasti onok bug e
                     // dump([$item->kode_barang]);
                     // echo ("tes");
@@ -125,105 +136,66 @@ class DetailController extends Controller
                 }
                 //kode barang kosong
                 else {
-                    $coba = Detail::join('tb_transaksi', 'tb_transaksi_detail.kode_transaksi', '=', 'tb_transaksi.kode_transaksi')
-                        ->where('tb_transaksi.kode_transaksi', $request->kode_transaksi)
-                        ->select('tb_transaksi.kode_agen', 'tb_transaksi_detail.kode_barang')
-                        ->get();
-                    $tes = Stok::join('tb_transaksi_detail', 'tb_transaksi_detail.kode_barang', '=', 'tb_stok.kode_barang')
-                    // ->join('tb_transaksi', 'tb_transaksi.kode_agen', '=', 'tb_stok.kode_agen')
-                        ->join('tb_transaksi', 'tb_transaksi_detail.kode_transaksi', '=', 'tb_transaksi.kode_transaksi')
-                        ->where('tb_transaksi.kode_transaksi', $request->kode_transaksi)
-                        ->select('tb_transaksi.kode_agen', 'tb_transaksi_detail.kode_barang', 'tb_transaksi.kode_transaksi')->get();
+
                     $jmlBrg = Detail::where('kode_barang', '=', $item->kode_barang)->where('kode_transaksi', $request->kode_transaksi)->select('jumlah')->get()->first();
-                    $kodeBrg = $tes[0]->kode_barang;
                     $jmlStok = $stok->jumlah;
-                    $trDtBrg = $coba[0]->kode_barang; //bener
-                    // dump([$item->kode_barang]);
-                    // echo ("tes");
 
-                    // dd([$request->kode_transaksi, $trDtBrg, $kodeBrg]);
-                    if ($trDtBrg == $kodeBrg) {
-
-                        $proses = $jmlStok + $jmlBrg->jumlah;
-                        // dd([$proses, $jmlBrg->jumlah, $jmlStok]); //Tambah relasi T stok ke Detail
-                        Stok::where('kode_agen', $item->kode_agen)->where('kode_barang', $item->kode_barang)->update(['jumlah' => $proses]);
-                        Transaksi::where('kode_transaksi', '=', $request->kode_transaksi)->update(['valid' => 1]);
-                    }
+                    $proses = $jmlStok + $jmlBrg->jumlah;
+                    // dd([$proses, $jmlBrg->jumlah, $jmlStok]); //Tambah relasi T stok ke Detail
+                    Stok::where('kode_agen', $item->kode_agen)->where('kode_barang', $item->kode_barang)->update(['jumlah' => $proses]);
+                    Transaksi::where('kode_transaksi', '=', $request->kode_transaksi)->update(['valid' => 1]);
                 }
             }
         } else if ($trJenis->jenis == "Setor") { //kode barang kosong
 
-            if (is_null($tbStok) || !$cekStok) { //tb stok kosong    //pasti onok bug e
+            // error handling
+            // barang a barang b
+            // jika barang a kosong barang b cancel update b
+            // error handling
+            $cekError = false;
+            $count = 0;
+            $tbDetail = Detail::where('kode_transaksi', $request->kode_transaksi);
+            $htgBrg = $tbDetail->count();
+            foreach ($detailPro as $item) {
+                $cekStok = Stok::where('kode_barang', '=', $item->kode_barang)->exists();
+                $errorStok = Parfum::where('kode_barang', $item->kode_barang)->select('kode_barang', 'nama_barang')->get();
 
-                return view('transaksi.Pusat.transaksi-error', [
-                    'error' => $errorStok->nama_barang,
-                    'id' => $request->kode_transaksi]);
-            } else {
-                $coba = Detail::join('tb_transaksi', 'tb_transaksi_detail.kode_transaksi', '=', 'tb_transaksi.kode_transaksi')
-                    ->where('tb_transaksi.kode_transaksi', $request->kode_transaksi)
-                    ->select('tb_transaksi.kode_agen', 'tb_transaksi_detail.kode_barang')
-                    ->get();
-                $tes = Stok::join('tb_transaksi_detail', 'tb_transaksi_detail.kode_barang', '=', 'tb_stok.kode_barang')
-                // ->join('tb_transaksi', 'tb_transaksi.kode_agen', '=', 'tb_stok.kode_agen')
-                    ->join('tb_transaksi', 'tb_transaksi_detail.kode_transaksi', '=', 'tb_transaksi.kode_transaksi')
-                    ->where('tb_transaksi.kode_transaksi', $request->kode_transaksi)
-                    ->select('tb_transaksi.kode_agen', 'tb_transaksi_detail.kode_barang', 'tb_transaksi.kode_transaksi')
-                    ->first()
-                    ->get();
-                $jmlBrg = Detail::where('kode_barang', '=', $detailPro[0]->kode_barang)->where('kode_transaksi', $request->kode_transaksi)->select('jumlah')->get()->first();
-                $kodeBrg = $tes[0]->kode_barang;
-                $jmlStok = $stok->jumlah;
-                $trDtBrg = $coba[0]->kode_barang;
-                // dd($tes[0]->kode_barang);
-                // dd([$request->kode_transaksi, $trDtBrg, $kodeBrg]);
-                if ($trDtBrg == $kodeBrg) {
-
-                    $proses = $jmlStok - $jmlBrg->jumlah;
-                    // dd([$proses, $jmlBrg->jumlah, $jmlStok]); //Tambah relasi T stok ke Detail
-                    Stok::where('kode_agen', $detailPro[0]->kode_agen)->where('kode_barang', $detailPro[0]->kode_barang)->update(['jumlah' => $proses]);
-                    Transaksi::where('kode_transaksi', '=', $request->kode_transaksi)->update(['valid' => 1]);
+                if (is_null($tbStok) || !$cekStok) { //tb stok kosong    //pasti onok bug e
+                    // dd($cekStok);
+                    toast('Barang "' . $errorStok[0]->nama_barang . '" Belum ada di Stok', 'error')->position('center-end');
+                    return redirect('/transaksi/detail/' . $request->kode_transaksi);
+                } else if ($cekStok) {
+                    $count++;
+                    if ($htgBrg == $count) {
+                        $cekError = true;
+                        // dump($count);
+                    }
+                    // dump([$count, $htgBrg]);
 
                 }
+
             }
+            // dd($cekError);
+            if ($cekError) {
+                // dump('ntoh');
+                foreach ($detailPro as $item) {
+
+                    $stok = Stok::where('kode_barang', '=', $item->kode_barang)->select('kode_barang', 'jumlah')->get();
+                    $detail = Detail::where('kode_barang', '=', $item->kode_barang)->where('kode_transaksi', $request->kode_transaksi)->select('jumlah')->get();
+                    $jmlBrg = $detail[0]->jumlah;
+                    $jmlStok = $stok[0]->jumlah;
+
+                    // dd($tes[0]->kode_barang);
+                    // dd([$request->kode_transaksi, $trDtBrg, $kodeBrg])
+                    $proses = $jmlStok - $jmlBrg;
+                    Stok::where('kode_agen', $item->kode_agen)->where('kode_barang', $item->kode_barang)->update(['jumlah' => $proses]);
+                    Transaksi::where('kode_transaksi', '=', $request->kode_transaksi)->update(['valid' => 1]);
+                }
+            }
+
         } else if ($trJenis->jenis == "Retur") { //kode barang kosong
             // dd($cekStok);
-            if (is_null($tbStok)) { //tb stok kosong    //pasti onok bug e
 
-                return view('transaksi.Pusat.transaksi-error', [
-                    'error' => $errorStok->nama_barang,
-                    'id' => $request->kode_transaksi]);
-            }
-            if (!$cekStok) {
-                // dd($errorStok->nama_barang);
-                return view('transaksi.Pusat.transaksi-error', [
-                    'error' => $errorStok->nama_barang,
-                    'id' => $request->kode_transaksi]);
-            } else {
-                $coba = Detail::join('tb_transaksi', 'tb_transaksi_detail.kode_transaksi', '=', 'tb_transaksi.kode_transaksi')
-                    ->where('tb_transaksi.kode_transaksi', $request->kode_transaksi)
-                    ->select('tb_transaksi.kode_agen', 'tb_transaksi_detail.kode_barang')
-                    ->get();
-                $tes = Stok::join('tb_transaksi_detail', 'tb_transaksi_detail.kode_barang', '=', 'tb_stok.kode_barang')
-                // ->join('tb_transaksi', 'tb_transaksi.kode_agen', '=', 'tb_stok.kode_agen')
-                    ->join('tb_transaksi', 'tb_transaksi_detail.kode_transaksi', '=', 'tb_transaksi.kode_transaksi')
-                    ->where('tb_transaksi.kode_transaksi', $request->kode_transaksi)
-                    ->select('tb_transaksi.kode_agen', 'tb_transaksi_detail.kode_barang', 'tb_transaksi.kode_transaksi')
-                    ->first()
-                    ->get();
-                $jmlBrg = Detail::where('kode_barang', '=', $detailPro[0]->kode_barang)->where('kode_transaksi', $request->kode_transaksi)->select('jumlah')->get()->first();
-                $kodeBrg = $tes[0]->kode_barang;
-                $jmlStok = $stok->jumlah;
-                $trDtBrg = $coba[0]->kode_barang;
-                // dd([$request->kode_transaksi, $trDtBrg, $kodeBrg]);
-                if ($trDtBrg == $kodeBrg) {
-                    // dd([$trDtBrg, $kodeBrg]);
-                    $proses = $jmlStok - $jmlBrg->jumlah;
-                    // dd([$proses, $jmlBrg->jumlah, $jmlStok]); //Tambah relasi T stok ke Detail
-                    Stok::where('kode_agen', $detailPro[0]->kode_agen)->where('kode_barang', $detailPro[0]->kode_barang)->update(['jumlah' => $proses]);
-                    Transaksi::where('kode_transaksi', '=', $request->kode_transaksi)->update(['valid' => 1]);
-
-                }
-            }
         }
         return redirect('/transaksi/')->with('success', 'Data berhasil ditambahkan');
     }
