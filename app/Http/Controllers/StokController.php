@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Stok;
 use Illuminate\Http\Request;
+use PDF;
 
 class StokController extends Controller
 {
@@ -40,5 +41,14 @@ class StokController extends Controller
             'STok' => $stok,
             'STok1'=> $stok1,
         ]);
+    }
+    public function laporCetak()
+    {
+        $stok = Stok::join('tb_parfum','tb_stok.kode_barang','=','tb_parfum.kode_barang')
+        ->join('tb_agen','tb_stok.kode_agen','=','tb_agen.kode_agen')
+        ->select('tb_stok.*','tb_parfum.nama_barang','tb_agen.nama_agen')
+        ->get();
+        $pdf = PDF::loadview('lapor.stok.stok_pdf',['STok'=>$stok]);
+        return $pdf->download('Laporan-Stok-pdf');
     }
 }

@@ -16,7 +16,9 @@
             </select>
             <br>
             <button type="submit" class="btn-primary btn">Cari</button>
+            <a href="/lapor/stok/cetak" class="btn btn-primary">Cetak</a>
         </form>
+       
         <br>
         <div class="panel panel-default" id="panel-editable">
             <div class="panel-heading">

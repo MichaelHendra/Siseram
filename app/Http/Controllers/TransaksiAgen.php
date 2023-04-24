@@ -1,23 +1,22 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Agen;
 use App\Models\Transaksi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
-use PDF;
-class TransaksiPusat extends Controller
+
+class TransaksiAgen extends Controller
 {
     public function index()
     {
         $transact = Transaksi::join('tb_agen', 'tb_transaksi.kode_agen', '=', 'tb_agen.kode_agen')
-            ->Where('tb_agen.status', '=', '1')
+            ->Where('tb_agen.status', '=', '0')
             ->select('tb_transaksi.*', 'tb_agen.nama_agen')
             ->paginate(10)->onEachSide(1);
 
-        return view('transaksi.Pusat.transaksi', [
+        return view('transaksi.Agen.transaksi', [
             'transact' => $transact,
 
         ]);
@@ -25,9 +24,9 @@ class TransaksiPusat extends Controller
     }
     public function create()
     {
-        $agen = Agen::Where('status', '=', '1')->get();
+        $agen = Agen::Where('status', '=', '0')->get();
         // dd($agen);
-        return view('transaksi.Pusat.transaksi-entry', [
+        return view('transaksi.Agen.transaksi-entry', [
             'agen' => $agen,
         ]);
     }
@@ -49,23 +48,23 @@ class TransaksiPusat extends Controller
         // dd(['id' => $this->tes('T-')]);
         Transaksi::create([
 
-            'kode_transaksi' => $this->generateId('T'),
+            'kode_transaksi' => $this->generateId('TA'),
             'kode_agen' => $request->kode_agen,
             'tanggal' => $this->dateToDB(),
             'jenis' => $request->jenis,
             'valid' => 0,
 
         ]);
-        return redirect('/transaksi');
+        return redirect('/transaksi/agen');
     }
     public function edit(string $id)
     {
         $transact = Transaksi::find($id);
-        $agen = Agen::Where('status', '=', '1')->get();
+        $agen = Agen::Where('status', '=', '0')->get();
         $dateFromField = $transact->tanggal;
         $date = Carbon::parse($dateFromField)->format('d/m/Y');
         // dd($date);
-        return view('transaksi.Pusat.transaksi-edit', [
+        return view('transaksi.Agen.transaksi-edit', [
             'agen' => $agen,
             'transact' => $transact,
             'date' => $date,
@@ -127,53 +126,5 @@ class TransaksiPusat extends Controller
     public function drop()
     {
         Schema::dropIfExists('tb_transaksi');
-    }
-
-    public function laporTampil()
-    {
-        $transact = Transaksi::join('tb_agen','tb_transaksi.kode_agen','=','tb_agen.kode_agen')
-        ->Where('tb_transaksi.valid','=','1')
-        ->select('tb_transaksi.*','tb_agen.nama_agen')
-        ->get();
-        return view('lapor/transaksi/transaksi', [
-            'transact' => $transact,
-        ]);
-    }
-    public function laporTproses(Request $request)
-    {
-        $tang1 = $request->tanggal1;
-        $newdatefrom = Carbon::createFromFormat('d/m/Y' , $tang1)->format('Y-m-d');
-        $date = $request->tanggal2;
-        $newdateto = Carbon::createFromFormat('d/m/Y' , $date)->format('Y-m-d');
-
-        $transact = Transaksi::join('tb_agen','tb_transaksi.kode_agen','=','tb_agen.kode_agen')
-        ->Where('tb_transaksi.valid','=','1')
-        ->whereBetween('tb_transaksi.tanggal',[$newdatefrom,$newdateto])
-        // ->whereDate('tb_transaksi.tanggal', '>=', $deng1)
-        // ->whereDate('tb_transaksi.tanggal', '<=', $newdate)
-        // ->groupBy('tb_transaksi.jenis')
-        ->select('tb_transaksi.*','tb_agen.nama_agen')
-        ->get();
-        return view('lapor/transaksi/transaksi', [
-            'transact' => $transact,
-        ]);
-    }
-    public function laporCetak(Request $request)
-    {
-        // $tang1 = $request->tanggal1;
-        // $newdatefrom = Carbon::createFromFormat('d/m/Y' , $tang1)->format('Y-m-d');
-        // $date = $request->tanggal2;
-        // $newdateto = Carbon::createFromFormat('d/m/Y' , $date)->format('Y-m-d');
-
-        $transact = Transaksi::join('tb_agen','tb_transaksi.kode_agen','=','tb_agen.kode_agen')
-        ->Where('tb_transaksi.valid','=','1')
-        // ->whereBetween('tb_transaksi.tanggal',[$newdatefrom,$newdateto])
-        // ->whereDate('tb_transaksi.tanggal', '>=', $deng1)
-        // ->whereDate('tb_transaksi.tanggal', '<=', $newdate)
-        // ->groupBy('tb_transaksi.jenis')
-        ->select('tb_transaksi.*','tb_agen.nama_agen')
-        ->get();
-        $pdf = PDF::loadview('lapor.transaksi.transaksi_pdf',['transaksi'=>$transact]);
-        return $pdf->download('Laporan-Transaksi-pdf');
     }
 }

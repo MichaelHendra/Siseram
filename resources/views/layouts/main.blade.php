@@ -116,7 +116,7 @@
 									<li><a href="javascript:;"><i class="ti ti-notepad"></i><span>Transaksi</span></a>
 										<ul class="acc-menu">
 											<li><a href="/transaksi">Gudang Pusat</a></li>
-											<li><a href="/">Agen</a></li>
+											<li><a href="/transaksi/agen">Agen</a></li>
 										</ul>
 									</li>
 									<li>
@@ -125,7 +125,7 @@
 									
 									<li><a href="javascript:;"><i class="ti ti-file"></i><span>Report</span></a>
 										<ul class="acc-menu">
-											<li><a href="/">Transaksi</a></li>
+											<li><a href="/lapor/transaksi">Transaksi</a></li>
 											<li><a href="/lapor/stok">Stok</a></li>
 											
 										</ul>

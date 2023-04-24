@@ -10,7 +10,7 @@
                 <a class="btn btn-default DTTT_button_text" id="ToolTables_crudtable_0"href="/tes/del"><i class="ti ti-plus"></i> <span>Mess</span></a>
             </div> --}}
             
-            <form action="/transaksi/detail/tambah" class="form-horizontal row-border" method="POST">
+            <form action="/transaksi/agen/detail/tambah" class="form-horizontal row-border" method="POST">
                 {{-- @method('PUT') --}}
                 @csrf
                 <div class="form-group">
@@ -22,12 +22,10 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label">Kode Agen/Nama Agen</label>
                     <div class="col-md-6">
-
                         @if ($transact->valid==1)
                             <input class="form-control" name="kode_agen"type="text" id="dtp-1" value={{ $Nama[0]->nama_agen }} readonly>
                         @else
                             <input class="form-control" name="kode_agen"type="text" id="dtp-1" value={{ $Nama[0]->nama_agen }} readonly>
-
                         @endif
                     </div>
                 </div>
@@ -52,9 +50,7 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label">Valid</label>
                     <div class="col-md-6">
-
                         @if ($transact->valid==1)
-
                         <input class="form-control" name="valid"type="text" id="dtp-1" value="Sudah Valid" readonly>
                         @else
                         <input class="form-control" name="valid"type="text" id="dtp-1" value="Belum Valid" readonly>
@@ -76,9 +72,7 @@
                     </div>
                 </div>
                 
-
                 @if ($transact->valid==0)
-
                     <div class="form-group">
                         <label class="col-md-3 control-label mr-3">Jumlah</label>
                         <div class="col-md-6">
@@ -95,9 +89,7 @@
                 <div class="panel-footer">
 
                     <div class="panel-body no-padding">
-
                     @if ($transact->valid==0)
-
                         
                         <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered datatables" id="crudtable">
                             <thead class="text-center">
@@ -146,9 +138,7 @@
                             </tr>
                         </thead>
                         <tbody class="text-center">
-
                             @forelse ($DataBarang as $ho)
-
                             <tr>
                                 
                                 <td>{{ $loop->iteration}}</td>
@@ -180,36 +170,23 @@
               
                 
             </form>
-
            
            
            @if ($transact->valid==0)
                
-                <form action={{ url('/transaksi/detail/masuk/'.$transact->kode_transaksi) }} method="POST">
+                <form action={{ url('/transaksi/agen/detail/masuk/'.$transact->kode_transaksi) }} method="POST">
                     @csrf
-                    {{-- @if ($ngeng->jenis == 'Setor')
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">Setor Ke</label>
-                        <div class="col-md-6">
-                            <select class="form-control" name="setor_ke" id="source">
-                                @forelse ($agen as $Hp)
-                                <option value="{{$Hp->kode_agen}}">{{$Hp->nama_agen}}</option>    
-                                @empty
-                                <option value="">Kosong</option>
-                                @endforelse
-        
-                            </select>
-                        </div>
-                    </div>
-                    @endif --}}
+                  
+                    <input class="form-control" name="setor_ke"type="hidden" id="dtp-1" value={{ $kodeAgen[0]->kode_agen }} >
+                    <input class="form-control" name="pusat"type="hidden" id="dtp-1" value={{ $pusat[0]->kode_agen }} >
+                    
                     <div class="col-md-6">
                         <input  type="hidden" name="kode_transaksi"class="form-control" value="{{ $transact->kode_transaksi }}">
                     </div>
-
                     <br>
                         <div class="row">
                             <div class="col-sm-8 col-sm-offset-2">
-                                    <button name="simpan" type="submit" class="btn btn-primary btn-valid" data-toggle="tooltip" title='Delete'>Validasi</button>
+                                    <button name="simpan" type="submit" class="btn btn-primary btn-valid" data-toggle="tooltip" title='Valid'>Validasi</button>
                             </div>
                         </div>
                 </form>
@@ -274,7 +251,7 @@ $(".btn-delete").click(function(e) {
     
     .then((willDelete) => {
       if (willDelete) {
-        window.location="/transaksi/detail/hapus/"+trNum+"/"+id+""
+        window.location="/transaksi/agen/detail/hapus/"+trNum+"/"+id+""
         swal("Data anda berhasil dihapus", {
           icon: "success",
           });

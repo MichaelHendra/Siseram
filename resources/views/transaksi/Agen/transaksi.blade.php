@@ -11,7 +11,7 @@
                 <h2>Tabel Transaksi</h2>
                 <div class="panel-ctrls"> 
                     <div class="DTTT btn-group pull-left mt-sm mr-3">
-                    <a class="btn btn-default DTTT_button_text" id="ToolTables_crudtable_0"href="/transaksi/tambah"><i class="ti ti-plus"></i> <span>New</span></a>
+                    <a class="btn btn-default DTTT_button_text" id="ToolTables_crudtable_0"href="/transaksi/agen/tambah"><i class="ti ti-plus"></i> <span>New</span></a>
                     </div>
                 </div>
             </div>
@@ -22,7 +22,7 @@
                         <tr>
                             <th class="text-center" width="5%">No</th>
                             <th class="text-center" width="30%">Kode Transaksi</th>
-                            <th class="text-center" width="20%">Kode Agen</th>
+                            <th class="text-center" width="20%">Nama Agen</th>
                             <th class="text-center" width="20%">Tanggal</th>
                             <th class="text-center" width="10%">Jenis</th>
                             <th class="text-center" width="10%">Valid</th>
@@ -30,26 +30,31 @@
                         </tr>
                     </thead>
                     <tbody class="text-center">
+                        @php
+                            $no=1+(($transact->currentPage()-1)*$transact->perPage()); 
+                        @endphp
                         @forelse ($transact as $t)
-                        
+                         
                         <tr>
-                            <td>{{ $loop->iteration}}</td>
+                            <td>{{ $no++}}</td>
                             <td>{{ $t->kode_transaksi }}</td>
-                            <td>{{ $t->dataAgen->nama_agen }}</td>
+                            <td>{{ $t->nama_agen }}</td>
                             <td class="date" data-date="{{ $t->tanggal }}">{{ $t->tanggal}}</td>
                             <td>{{ $t->jenis }}</td>
                             @if ( $t->valid==0)
-                            <td><span class="label label-warning">Belum Valid</span></td>
+                                <td><span class="label label-warning">Belum Valid</span></td>
                             @else
-                            <td><span class="label label-success">Sudah Valid</span></td>
+                                <td><span class="label label-success">Sudah Valid</span></td>
                             @endif
                             
                            @if ($t->valid==0)
                            <td >
-                            <a href="/transaksi/edit/{{ $t->kode_transaksi }}" class="btn btn-warning btn-label d-inline"><i class="ti ti-pencil-alt"></i><span>Edit</span></a>
+                            <a href="/transaksi/agen/detail/{{ $t->kode_transaksi }}" class="btn btn-warning btn-label d-inline"><i class="ti ti-pencil-alt"></i><span>Edit</span></a>
                            </td>
                            @else
-                           <td>Sudah Divalidasi</td>
+                           <td >
+                            <a href="/transaksi/agen/detail/{{ $t->kode_transaksi }}" class="btn btn-success btn-label d-inline"><i class="ti ti-pencil-alt"></i><span>Lihat</span></a>
+                           </td>
                            @endif
                             
                         </tr>
@@ -61,7 +66,7 @@
                     </tbody>
                 </table>
                 <!--end table-->
-                
+                {{ $transact->links() }}
             </div>
         </div>
     </div>
