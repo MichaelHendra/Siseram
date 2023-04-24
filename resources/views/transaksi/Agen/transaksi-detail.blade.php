@@ -10,7 +10,7 @@
                 <a class="btn btn-default DTTT_button_text" id="ToolTables_crudtable_0"href="/tes/del"><i class="ti ti-plus"></i> <span>Mess</span></a>
             </div> --}}
             
-            <form action="/transaksi/detail/tambah" class="form-horizontal row-border" method="POST">
+            <form action="/transaksi/agen/detail/tambah" class="form-horizontal row-border" method="POST">
                 {{-- @method('PUT') --}}
                 @csrf
                 <div class="form-group">
@@ -174,30 +174,18 @@
            
            @if ($ngeng->valid==0)
                
-                <form action={{ url('/transaksi/detail/masuk/'.$ngeng->kode_transaksi) }} method="POST">
+                <form action={{ url('/transaksi/agen/detail/masuk/'.$ngeng->kode_transaksi) }} method="POST">
                     @csrf
-                    {{-- @if ($ngeng->jenis == 'Setor')
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">Setor Ke</label>
-                        <div class="col-md-6">
-                            <select class="form-control" name="setor_ke" id="source">
-                                @forelse ($agen as $Hp)
-                                <option value="{{$Hp->kode_agen}}">{{$Hp->nama_agen}}</option>    
-                                @empty
-                                <option value="">Kosong</option>
-                                @endforelse
-        
-                            </select>
-                        </div>
-                    </div>
-                    @endif --}}
+                  
+                    <input class="form-control" name="setor_ke"type="hidden" id="dtp-1" value={{ $waro69[0]->kode_agen }} >
+                    
                     <div class="col-md-6">
                         <input  type="hidden" name="kode_transaksi"class="form-control" value="{{ $ngeng->kode_transaksi }}">
                     </div>
                     <br>
                         <div class="row">
                             <div class="col-sm-8 col-sm-offset-2">
-                                    <button name="simpan" type="submit" class="btn btn-primary btn-valid" data-toggle="tooltip" title='Delete'>Validasi</button>
+                                    <button name="simpan" type="submit" class="btn btn-primary btn-valid" data-toggle="tooltip" title='Valid'>Validasi</button>
                             </div>
                         </div>
                 </form>
@@ -262,7 +250,7 @@ $(".btn-delete").click(function(e) {
     
     .then((willDelete) => {
       if (willDelete) {
-        window.location="/transaksi/detail/hapus/"+trNum+"/"+id+""
+        window.location="/transaksi/agen/detail/hapus/"+trNum+"/"+id+""
         swal("Data anda berhasil dihapus", {
           icon: "success",
           });

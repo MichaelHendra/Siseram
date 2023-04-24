@@ -11,12 +11,12 @@
                 <a class="btn btn-default DTTT_button_text" id="ToolTables_crudtable_0"href="/tes/del"><i class="ti ti-plus"></i> <span>Mess</span></a>
             </div> --}}
             
-            <form action="{{ url('/transaksi/store') }}" class="form-horizontal row-border" method="POST">
+            <form action="{{ url('/transaksi/agen/store') }}" class="form-horizontal row-border" method="POST">
                 @csrf
                 <div class="form-group">
                     <label class="col-md-3 control-label">Kode Agen/Nama Agens</label>
                     <div class="col-md-6">
-                        <select class="form-control" name="kode_agen" id="source">
+                        <select  class="form-control" name="kode_agen" id="source" >
                                 @forelse ($agen as $a)
                                 <option value="{{$a->kode_agen }}">{{ $a->nama_agen }}</option>
                                 @empty         
@@ -28,7 +28,7 @@
                 <div class="form-group">
                     <label for="dtp-1" class="col-md-3 control-label">Tanggal</label>
                     <div class="col-sm-8">
-                        <input class="form-control datepicker" name="tanggal"type="text" id="dtp-1">
+                        <input class="form-control datepicker" name="tanggal"type="text" id="dtp-1"autocomplete="off">
                     </div>
                 </div>
                 <div class="form-group">
