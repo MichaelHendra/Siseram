@@ -16,16 +16,16 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label mr-3">Kode Transaksi</label>
                     <div class="col-md-6">
-                        <input  type="text" name="kode_transaksi"class="form-control" value="{{ $ngeng->kode_transaksi }}" readonly>
+                        <input  type="text" name="kode_transaksi"class="form-control" value="{{ $transact->kode_transaksi }}" readonly>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-3 control-label">Kode Agen/Nama Agen</label>
                     <div class="col-md-6">
-                        @if ($ngeng->valid==1)
-                            <input class="form-control" name="kode_agen"type="text" id="dtp-1" value={{ $waro[0]->nama_agen }} readonly>
+                        @if ($transact->valid==1)
+                            <input class="form-control" name="kode_agen"type="text" id="dtp-1" value={{ $Nama[0]->nama_agen }} readonly>
                         @else
-                            <input class="form-control" name="kode_agen"type="text" id="dtp-1" value={{ $waro[0]->nama_agen }} readonly>
+                            <input class="form-control" name="kode_agen"type="text" id="dtp-1" value={{ $Nama[0]->nama_agen }} readonly>
                         @endif
                     </div>
                 </div>
@@ -38,19 +38,19 @@
                 <div class="form-group">
                     <label for="dtp-1" class="col-md-3 control-label">Tanggal</label>
                     <div class="col-sm-8">
-                        <input class="form-control datepicker" name="tanggal"type="text" id="dtp-1" value="{{ $ngeng->tanggal }}" readonly>
+                        <input class="form-control datepicker" name="tanggal"type="text" id="dtp-1" value="{{ $transact->tanggal }}" readonly>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-3 control-label">Jenis</label>
                     <div class="col-md-6">
-                            <input class="form-control" name="kode_agen"type="text" id="dtp-1" value={{ $ngeng->jenis }} readonly>
+                            <input class="form-control" name="kode_agen"type="text" id="dtp-1" value={{ $transact->jenis }} readonly>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-3 control-label">Valid</label>
                     <div class="col-md-6">
-                        @if ($ngeng->valid==1)
+                        @if ($transact->valid==1)
                         <input class="form-control" name="valid"type="text" id="dtp-1" value="Sudah Valid" readonly>
                         @else
                         <input class="form-control" name="valid"type="text" id="dtp-1" value="Belum Valid" readonly>
@@ -62,7 +62,7 @@
                     <label class="col-md-3 control-label">Tambah Parfum</label>
                     <div class="col-md-6">
                         <select class="form-control" name="kode_barang" id="source">
-                            @forelse ($par as $kol)
+                            @forelse ($parfum as $kol)
                             <option value="{{$kol->kode_barang}}">{{$kol->nama_barang}}</option>    
                             @empty
                             <option value="">Kosong</option>
@@ -72,7 +72,7 @@
                     </div>
                 </div>
                 
-                @if ($ngeng->valid==0)
+                @if ($transact->valid==0)
                     <div class="form-group">
                         <label class="col-md-3 control-label mr-3">Jumlah</label>
                         <div class="col-md-6">
@@ -89,7 +89,7 @@
                 <div class="panel-footer">
 
                     <div class="panel-body no-padding">
-                    @if ($ngeng->valid==0)
+                    @if ($transact->valid==0)
                         
                         <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered datatables" id="crudtable">
                             <thead class="text-center">
@@ -102,7 +102,7 @@
                                 </tr>
                             </thead>
                             <tbody class="text-center">
-                                @forelse ($det as $ho)
+                                @forelse ($DataBarang as $ho)
                                 <tr>
                                     
                                     <td>{{ $loop->iteration}}</td>
@@ -138,7 +138,7 @@
                             </tr>
                         </thead>
                         <tbody class="text-center">
-                            @forelse ($det as $ho)
+                            @forelse ($DataBarang as $ho)
                             <tr>
                                 
                                 <td>{{ $loop->iteration}}</td>
@@ -172,15 +172,16 @@
             </form>
            
            
-           @if ($ngeng->valid==0)
+           @if ($transact->valid==0)
                
-                <form action={{ url('/transaksi/agen/detail/masuk/'.$ngeng->kode_transaksi) }} method="POST">
+                <form action={{ url('/transaksi/agen/detail/masuk/'.$transact->kode_transaksi) }} method="POST">
                     @csrf
                   
-                    <input class="form-control" name="setor_ke"type="hidden" id="dtp-1" value={{ $waro69[0]->kode_agen }} >
+                    <input class="form-control" name="setor_ke"type="hidden" id="dtp-1" value={{ $kodeAgen[0]->kode_agen }} >
+                    <input class="form-control" name="pusat"type="hidden" id="dtp-1" value={{ $pusat[0]->kode_agen }} >
                     
                     <div class="col-md-6">
-                        <input  type="hidden" name="kode_transaksi"class="form-control" value="{{ $ngeng->kode_transaksi }}">
+                        <input  type="hidden" name="kode_transaksi"class="form-control" value="{{ $transact->kode_transaksi }}">
                     </div>
                     <br>
                         <div class="row">

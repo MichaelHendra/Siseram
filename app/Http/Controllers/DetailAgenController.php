@@ -15,12 +15,12 @@ class DetailAgenController extends Controller
 
         $transact = Transaksi::find($id);
 
-        $war = Transaksi::find($id)
+        $namaAgen = Transaksi::find($id)
             ->join('tb_agen', 'tb_agen.kode_agen', '=', 'tb_transaksi.kode_agen')
             ->where('tb_transaksi.kode_transaksi', $id)
             ->get('tb_agen.nama_agen');
         
-        $war69 = Transaksi::find($id)
+        $kodeAgen = Transaksi::find($id)
         ->join('tb_agen', 'tb_agen.kode_agen', '=', 'tb_transaksi.kode_agen')
         ->where('tb_transaksi.kode_transaksi', $id)
         ->get('tb_agen.kode_agen');
@@ -30,7 +30,8 @@ class DetailAgenController extends Controller
         // $list = Detail::join('tb_parfum','tb_parfum.kode_barang','=','tb_transaksi_detail.kode_barang')
         // ->select('tb_transaksi_detail.*','tb_parfum.nama_barang')
         // ->get();
-        $tol = Detail::join('tb_transaksi', 'tb_transaksi.kode_transaksi', '=', 'tb_transaksi_detail.kode_transaksi')
+        $Pusat = Agen::where('status','=','1')->get();
+        $viewDetailbarang = Detail::join('tb_transaksi', 'tb_transaksi.kode_transaksi', '=', 'tb_transaksi_detail.kode_transaksi')
             ->join('tb_parfum', 'tb_transaksi_detail.kode_barang', '=', 'tb_parfum.kode_barang')
             ->join('tb_agen', 'tb_transaksi.kode_agen', '=', 'tb_agen.kode_agen')
             ->where('tb_transaksi.kode_transaksi', $id)
@@ -48,12 +49,13 @@ class DetailAgenController extends Controller
         $agen = Agen::Where('status','=','0')->get();
         // dd($agen);
         return view('transaksi/agen/transaksi-detail', [
-            'ngeng' => $transact,
-            'waro' => $war,
-            'par' => $barang,
-            'det' => $tol,
+            'transact' => $transact,
+            'Nama' => $namaAgen,
+            'parfum' => $barang,
+            'DataBarang' => $viewDetailbarang,
             'agen' => $agen,
-            'waro69' => $war69,
+            'kodeAgen' => $kodeAgen,
+            'pusat' => $Pusat,
             // 'id' => $idBarang,
             // 'idBarang' => $barang[0]->kode_barang,
             // 'idDetail' => $idBarangDetail,
@@ -93,13 +95,15 @@ class DetailAgenController extends Controller
             ->select('tb_transaksi.kode_agen', 'tb_transaksi.jenis', 'tb_transaksi_detail.kode_barang', 'tb_transaksi_detail.jumlah')->get();
         
         $stok = Stok::where('kode_barang', '=', $detailPro[0]->kode_barang)->select('kode_barang', 'jumlah')->get()->first();
-        $tbStok = Stok::select('kode_agen')->get()->first();
+        // $tbStok = Stok::select('kode_agen')->get()->first();
+        $tbStok = Stok::where('kode_agen','=','PU001')->get();
+        // dd($tbStok);
         // dd($tbStok);
         $storke = $request->setor_ke;
         // dd($storke);
         // dd($request->setor_ke);
-        $tbStokAgen = Stok::where('kode_agen','=',$request->setor_ke)->get()->first();
-        // dd($tbStokAgen);
+        $tbStokAgen = Stok::where('kode_agen','=',$request->setor_ke)->get(); 
+        //dd($tbStokAgen);
         $trJenis = Transaksi::where('kode_transaksi', '=', $request->kode_transaksi)->select('jenis')->get()->first();
         
 
@@ -146,7 +150,7 @@ class DetailAgenController extends Controller
                     $jmlBrg = $detail[0]->jumlah;
                     $jmlStok = $stok[0]->jumlah;
                    
-                    // dd($tbStokAgen);
+                    $cekStok = Stok::where('kode_barang', '=', $item->kode_barang)->where('kode_agen','=',$item->kode_agen)->exists();
                     if(is_null($tbStokAgen) || !$cekStok){
                         Stok::create([
                             'kode_agen' => $item->kode_agen,
@@ -168,7 +172,7 @@ class DetailAgenController extends Controller
 
                     $proses = $jmlStok - $jmlBrg;
 
-                    Stok::where('kode_agen', $tbStok->kode_agen)->where('kode_barang', $item->kode_barang)->update(['jumlah' => $proses]);
+                    Stok::where('kode_agen', $request->pusat)->where('kode_barang', $item->kode_barang)->update(['jumlah' => $proses]);
                     Transaksi::where('kode_transaksi', '=', $request->kode_transaksi)->update(['valid' => 1]);
                 }
             }

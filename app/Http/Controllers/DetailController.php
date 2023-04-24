@@ -16,7 +16,7 @@ class DetailController extends Controller
 
         $transact = Transaksi::find($id);
 
-        $war = Transaksi::find($id)
+        $namaAgen = Transaksi::find($id)
             ->join('tb_agen', 'tb_agen.kode_agen', '=', 'tb_transaksi.kode_agen')
             ->where('tb_transaksi.kode_transaksi', $id)
             ->get('tb_agen.nama_agen');
@@ -26,7 +26,7 @@ class DetailController extends Controller
         // $list = Detail::join('tb_parfum','tb_parfum.kode_barang','=','tb_transaksi_detail.kode_barang')
         // ->select('tb_transaksi_detail.*','tb_parfum.nama_barang')
         // ->get();
-        $tol = Detail::join('tb_transaksi', 'tb_transaksi.kode_transaksi', '=', 'tb_transaksi_detail.kode_transaksi')
+        $viewDetailbarang = Detail::join('tb_transaksi', 'tb_transaksi.kode_transaksi', '=', 'tb_transaksi_detail.kode_transaksi')
             ->join('tb_parfum', 'tb_transaksi_detail.kode_barang', '=', 'tb_parfum.kode_barang')
             ->join('tb_agen', 'tb_transaksi.kode_agen', '=', 'tb_agen.kode_agen')
             ->where('tb_transaksi.kode_transaksi', $id)
@@ -44,11 +44,12 @@ class DetailController extends Controller
         $agen = Agen::all();
         // dd($agen);
         return view('transaksi/Pusat/transaksi-detail', [
-            'ngeng' => $transact,
-            'waro' => $war,
-            'par' => $barang,
-            'det' => $tol,
+            'transact' => $transact,
+            'Nama' => $namaAgen,
+            'parfum' => $barang,
+            'DataBarang' => $viewDetailbarang,
             'agen' => $agen,
+            
             // 'id' => $idBarang,
             // 'idBarang' => $barang[0]->kode_barang,
             // 'idDetail' => $idBarangDetail,
