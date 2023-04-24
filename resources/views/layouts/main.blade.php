@@ -146,7 +146,7 @@
 							<li class=""><a href="index.html">Home</a></li>
 						</ol>
 						<div class="container-fluid">
-							{{-- @include('sweetalert::alert') --}}
+							@include('sweetalert::alert')
 							@yield('isi')
 						</div> <!-- .container-fluid -->
 					</div> <!-- #page-content -->
