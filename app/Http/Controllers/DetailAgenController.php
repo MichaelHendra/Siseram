@@ -86,9 +86,12 @@ class DetailAgenController extends Controller
         return redirect('/transaksi/agen/detail/' . $trNum)->with('success', 'Data berhasil dihapus');
     }
 
-    public function detailAgenMasuk(Request $request)
+
+
+
+    public function detailAgenMasuk(Request $request) // fungsi proses barang untuk agen 
     {
-        $nyoba = Detail::select('kode_barang')->where('kode_transaksi', $request->kode_transaksi)->get();
+        // $nyoba = Detail::select('kode_barang')->where('kode_transaksi', $request->kode_transaksi)->get();
 
         $detailPro = Detail::join('tb_transaksi', 'tb_transaksi.kode_transaksi', '=', 'tb_transaksi_detail.kode_transaksi')
             ->Where('tb_transaksi_detail.kode_transaksi', $request->kode_transaksi)
@@ -97,11 +100,6 @@ class DetailAgenController extends Controller
         $stok = Stok::where('kode_barang', '=', $detailPro[0]->kode_barang)->select('kode_barang', 'jumlah')->get()->first();
         // $tbStok = Stok::select('kode_agen')->get()->first();
         $tbStok = Stok::where('kode_agen','=','PU001')->get();
-        // dd($tbStok);
-        // dd($tbStok);
-        $storke = $request->setor_ke;
-        // dd($storke);
-        // dd($request->setor_ke);
         $tbStokAgen = Stok::where('kode_agen','=',$request->setor_ke)->get(); 
         //dd($tbStokAgen);
         $trJenis = Transaksi::where('kode_transaksi', '=', $request->kode_transaksi)->select('jenis')->get()->first();
@@ -123,7 +121,7 @@ class DetailAgenController extends Controller
                 $errorStok = Parfum::where('kode_barang', $item->kode_barang)->select('kode_barang', 'nama_barang')->get();
                 
 
-                if (is_null($tbStok) || !$cekStok) { //tb stok kosong    //pasti onok bug e
+                if (is_null($tbStok) || !$cekStok) { //tb stok kosong buat Pusat    //pasti onok bug e
                     // dd($cekStok);
                     toast('Barang "' . $errorStok[0]->nama_barang . '" Belum ada di Stok Pusat', 'error')->position('center-end');
                     return redirect('/transaksi/agen/detail/' . $request->kode_transaksi);
@@ -141,7 +139,7 @@ class DetailAgenController extends Controller
             // dd($cekError);
             if ($cekError) {
                 // dump('ntoh');
-                foreach ($detailPro as $item) {
+                foreach ($detailPro as $item) { // buat nambah barang agen & barang berkurang buat pusat
                     
 
                     $stok = Stok::where('kode_barang', '=', $item->kode_barang)->select('kode_barang', 'jumlah')->get();
@@ -174,6 +172,118 @@ class DetailAgenController extends Controller
 
                     Stok::where('kode_agen', $request->pusat)->where('kode_barang', $item->kode_barang)->update(['jumlah' => $proses]);
                     Transaksi::where('kode_transaksi', '=', $request->kode_transaksi)->update(['valid' => 1]);
+                }
+            }
+
+        
+        } else if($trJenis->jenis == "Setor"){
+            $cekError = false;
+            $count = 0;
+            $tbDetail = Detail::where('kode_transaksi', $request->kode_transaksi);
+            $htgBrg = $tbDetail->count();
+            
+            foreach ($detailPro as $item) {
+                $cekStok = Stok::where('kode_barang', '=', $item->kode_barang)->exists();
+                $errorStok = Parfum::where('kode_barang', $item->kode_barang)->select('kode_barang', 'nama_barang')->get();
+
+                if (is_null($tbStokAgen) || !$cekStok) { //tb stok kosong    //pasti onok bug e
+                    // dd($cekStok);
+                    toast('Barang "' . $errorStok[0]->nama_barang . '" Belum ada di Stok Agen', 'error')->position('center-end');
+                    return redirect('/transaksi/agen/detail/' . $request->kode_transaksi);
+                } else if ($cekStok) {
+                    $count++;
+                    if ($htgBrg == $count) {
+                        $cekError = true;
+                        // dump($count);
+                    }
+                    // dump([$count, $htgBrg]);
+
+                }
+
+            }
+            // dd($cekError);
+            if ($cekError) {
+                // dump('ntoh');
+                foreach ($detailPro as $item) {
+                    
+
+                    $stokAgen = Stok::where('kode_agen', $request->setor_ke)->where('kode_barang', $item->kode_barang)->select('jumlah')->get();
+                    $detail = Detail::where('kode_barang', '=', $item->kode_barang)->where('kode_transaksi', $request->kode_transaksi)->select('jumlah')->get();
+                    $jmlBrg = $detail[0]->jumlah;
+                    $jmlStok = $stokAgen[0]->jumlah;
+                    // dd($request->setor_ke);
+                    
+                    // dd($tes[0]->kode_barang);
+                    // dd([$request->kode_transaksi, $trDtBrg, $kodeBrg])
+                    $proses = $jmlStok - $jmlBrg;
+
+                    Stok::where('kode_agen', $item->kode_agen)->where('kode_barang', $item->kode_barang)->update(['jumlah' => $proses]);
+                    Transaksi::where('kode_transaksi', '=', $request->kode_transaksi)->update(['valid' => 1]);
+                }
+            }
+
+        } else if($trJenis->jenis == "Retur"){
+            $cekError = false;
+            $count = 0;
+            $tbDetail = Detail::where('kode_transaksi', $request->kode_transaksi);
+            $htgBrg = $tbDetail->count();
+            
+            foreach ($detailPro as $item) {
+                $cekStok = Stok::where('kode_barang', '=', $item->kode_barang)->exists();
+                $errorStok = Parfum::where('kode_barang', $item->kode_barang)->select('kode_barang', 'nama_barang')->get();
+                
+
+                if (is_null($tbStokAgen) || !$cekStok) { //tb stok kosong buat Pusat    //pasti onok bug e
+                    // dd($cekStok);
+                    toast('Barang "' . $errorStok[0]->nama_barang . '" Belum ada di Stok Agen', 'error')->position('center-end');
+                    return redirect('/transaksi/agen/detail/' . $request->kode_transaksi);
+                } else if ($cekStok) {
+                    $count++;
+                    if ($htgBrg == $count) {
+                        $cekError = true;
+                        // dump($count);
+                    }
+                    // dump([$count, $htgBrg]);
+
+                }
+
+            }
+            // dd($cekError);
+            if ($cekError) {
+                // dump('ntoh');
+                foreach ($detailPro as $item) { // buat nambah barang agen & barang berkurang buat pusat
+                    
+
+                    $stok = Stok::where('kode_barang', '=', $item->kode_barang)->select('kode_barang', 'jumlah')->get();
+                    $detail = Detail::where('kode_barang', '=', $item->kode_barang)->where('kode_transaksi', $request->kode_transaksi)->select('jumlah')->get();
+                    // dd($stokAgen);
+                    $jmlBrg = $detail[0]->jumlah;
+                    $jmlStok = $stok[0]->jumlah;
+                    
+                    $cekStok = Stok::where('kode_barang', '=', $item->kode_barang)->where('kode_agen','=',$item->kode_agen)->exists();
+                    if(is_null($tbStok) || !$cekStok){
+                        Stok::create([
+                            'kode_agen' => $item->kode_agen,
+                            'kode_barang' => $item->kode_barang,
+                            'jumlah' => $item->jumlah,
+                        ]); //stok
+                    } else{
+                        
+                        $proses = $jmlStok + $jmlBrg;
+                        Stok::where('kode_agen', $request->pusat)->where('kode_barang', $item->kode_barang)->update(['jumlah' => $proses]);
+                        Transaksi::where('kode_transaksi', '=', $request->kode_transaksi)->update(['valid' => 1]);
+                    }
+                    // if()
+                    $stokAgen = Stok::where('kode_agen', $request->setor_ke)->where('kode_barang', $item->kode_barang)->select('jumlah')->get();
+                    $jmlBrgAgen = $detail[0]->jumlah; 
+                    $jmlStokAgen = $stokAgen[0]->jumlah;
+
+                    $prosesAgen = $jmlStokAgen - $jmlBrgAgen;
+                        
+                        // dd([$proses, $jmlBrg->jumlah, $jmlStok]); //Tambah relasi T stok ke Detail
+                    Stok::where('kode_agen', $request->setor_ke)->where('kode_barang', $item->kode_barang)->update(['jumlah' => $prosesAgen]);
+
+                    
                 }
             }
 

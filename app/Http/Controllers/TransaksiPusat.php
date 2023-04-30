@@ -174,6 +174,6 @@ class TransaksiPusat extends Controller
         ->select('tb_transaksi.*','tb_agen.nama_agen')
         ->get();
         $pdf = PDF::loadview('lapor.transaksi.transaksi_pdf',['transaksi'=>$transact]);
-        return $pdf->download('Laporan-Transaksi-pdf');
+        return $pdf->download('Laporan-Transaksi.pdf');
     }
 }
