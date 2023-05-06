@@ -277,7 +277,6 @@ class DetailController extends Controller
                     $proses = $jmlStok - $jmlBrg;
                     // dump($proses, $item->kode_barang);
                     Stok::where('kode_agen', $item->kode_agen)->where('kode_barang', $item->kode_barang)->update(['jumlah' => $proses]);
-
                 }
                 Transaksi::where('kode_transaksi', '=', $request->kode_transaksi)->update(['valid' => 1]);
 
@@ -361,7 +360,6 @@ class DetailController extends Controller
                     $proses = $jmlStok - $jmlBrg;
                     dump($proses, $item->kode_barang);
                     Stok::where('kode_agen', $item->kode_agen)->where('kode_barang', $item->kode_barang)->update(['jumlah' => $proses]);
-
                 }
                 Transaksi::where('kode_transaksi', '=', $request->kode_transaksi)->update(['valid' => 1]);
 
