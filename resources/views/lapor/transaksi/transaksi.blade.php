@@ -48,18 +48,19 @@
                     <thead class="text-center">
                         <tr>
                             <th class="text-center" width="5%">No</th>
-                            <th class="text-center" width="30%">Kode Transaksi</th>
-                            <th class="text-center" width="20%">Nama Agen</th>
-                            <th class="text-center" width="20%">Tanggal</th>
-                            <th class="text-center" width="10%">Jenis</th>
+                            <th class="text-center" width="30%">Kode Barang</th>
+                            <th class="text-center" width="20%">Nama Barang</th>
+                            <th class="text-center" width="20%">Jumlah</th>
+                            <th class="text-center" width="10%">Harga Pusat</th>
+                            <th class="text-center" width="10%">Harga Agen</th>
+                            <th class="text-center" width="10%">Sub Total</th>
                             <th class="text-center" width="10%">Valid</th>
-                            <th class="text-center" width="30%">Action</th>
                         </tr>
                     </thead>
                     <tbody class="text-center">
                         @forelse ($transact as $t)
                         
-                        <tr>
+                        {{-- <tr>
                             <td>{{ $loop->iteration}}</td>
                             <td>{{ $t->kode_transaksi }}</td>
                             <td>{{ $t->nama_agen }}</td>
@@ -78,6 +79,28 @@
                            @else
                            <td>Sudah Divalidasi</td>
                            @endif
+                            
+                        </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6">Data Tidak ada</td>
+                            </tr>
+                        @endforelse --}}
+                        <tr>
+                            <td>{{ $loop->iteration}}</td>
+                            <td>{{ $t->kode_barang }}</td>
+                            <td>{{ $t->nama_barang }}</td>
+                            {{-- <td class="date" data-date="{{ $t->tanggal }}">{{ $t->tanggal}}</td> --}}
+                            <td>{{ $t->total_brg }}</td>
+                            <td>{{ $t->h_beli }}</td>
+                            <td>{{ $t->h_agen }}</td>
+                            <td>{{ $t->total_harga }}</td>
+                            @if ( $t->valid==0)
+                            <td><span class="label label-warning">Belum Valid</span></td>
+                            @else
+                            <td><span class="label label-success">Sudah Valid</span></td>
+                            @endif
+                        
                             
                         </tr>
                         @empty

@@ -11,6 +11,6 @@ class Detail extends Model
     protected $table = 'tb_transaksi_detail';
     protected $primaryKey = 'kode_detail';
     public $incrementing = true;
-    protected $fillable = ['kode_detail', 'kode_transaksi', 'kode_barang', 'jumlah'];
+    protected $fillable = ['kode_detail', 'kode_transaksi', 'kode_barang', 'jumlah','harga'];
     public $timestamps = true;
 }

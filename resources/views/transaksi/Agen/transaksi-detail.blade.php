@@ -97,7 +97,9 @@
                                     <th class="text-center" width="5%">No</th>
                                     <th class="text-center" width="30%">Nama Barang</th>
                                     <th class="text-center" width="20%">Nama Agen</th>
-                                    <th class="text-center" width="20%">Jumlah</th>
+                                    <th class="text-center" width="15%">Harga</th>
+                                    <th class="text-center" width="8%">Jumlah</th>
+                                    <th class="text-center" width="20%">Sub Total</th>
                                     <th class="text-center" width="20%">Action</th>
                                 </tr>
                             </thead>
@@ -108,7 +110,9 @@
                                     <td>{{ $loop->iteration}}</td>
                                     <td>{{ $ho->nama_barang}}</td>
                                     <td>{{ $ho->nama_agen }}</td>
+                                    <td>{{ $ho->h_agen }}</td>
                                     <td>{{ $ho->jumlah}}</td>
+                                    <td>{{ $ho->harga}}</td>
                                     <td><a class=" btn btn-danger btn-label btn-delete"href="#" data-toggle="tooltip" data-trNum="{{ $ho->kode_transaksi }}" data-deleteName="{{ $ho->nama_barang }}" data-deleteid="{{ $ho->kode_barang }}" title='Delete'><i class="ti ti-trash"></i><span>Delete</span></a></td>
                                 </tr>     
                                     @empty
@@ -132,9 +136,11 @@
                         <thead class="text-center">
                             <tr>
                                 <th class="text-center" width="5%">No</th>
-                                <th class="text-center" width="30%">Nama Barang</th>
-                                <th class="text-center" width="20%">Nama Agen</th>
-                                <th class="text-center" width="20%">Jumlah</th>
+                                    <th class="text-center" width="30%">Nama Barang</th>
+                                    <th class="text-center" width="20%">Nama Agen</th>
+                                    <th class="text-center" width="15%">Harga</th>
+                                    <th class="text-center" width="8%">Jumlah</th>
+                                    <th class="text-center" width="20%">Sub Total</th>
                             </tr>
                         </thead>
                         <tbody class="text-center">
@@ -144,7 +150,9 @@
                                 <td>{{ $loop->iteration}}</td>
                                 <td>{{ $ho->nama_barang}}</td>
                                 <td>{{ $ho->nama_agen }}</td>
+                                <td>{{ $ho->h_agen }}</td>
                                 <td>{{ $ho->jumlah}}</td>
+                                <td>{{ $ho->harga}}</td>
                             </tr>     
                                 @empty
                             <tr>
