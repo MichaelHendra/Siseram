@@ -265,8 +265,7 @@ class DetailController extends Controller
                         // dump([$count, $htgBrg]);
 
                     }
-                    // Stok::where('kode_agen', $item->kode_agen)->where('kode_barang', $item->kode_barang)->update(['jumlah' => $proses]);
-                    // Transaksi::where('kode_transaksi', '=', $request->kode_transaksi)->update(['valid' => 1]);
+
                 }
             }
             if ($jmlStok) {
@@ -278,8 +277,9 @@ class DetailController extends Controller
                     $proses = $jmlStok - $jmlBrg;
                     // dump($proses, $item->kode_barang);
                     Stok::where('kode_agen', $item->kode_agen)->where('kode_barang', $item->kode_barang)->update(['jumlah' => $proses]);
-                    Transaksi::where('kode_transaksi', '=', $request->kode_transaksi)->update(['valid' => 1]);
+
                 }
+                Transaksi::where('kode_transaksi', '=', $request->kode_transaksi)->update(['valid' => 1]);
 
             }
 
@@ -293,6 +293,7 @@ class DetailController extends Controller
             $count = 0;
             $tbDetail = Detail::where('kode_transaksi', $request->kode_transaksi);
             $htgBrg = $tbDetail->count();
+
             foreach ($detailPro as $item) {
                 $cekStok = Stok::where('kode_barang', '=', $item->kode_barang)->exists();
                 $errorStok = Parfum::where('kode_barang', $item->kode_barang)->select('kode_barang', 'nama_barang')->get();
@@ -313,6 +314,10 @@ class DetailController extends Controller
 
             }
             // dd($cekError);
+            $jmlStok = false;
+            $count = 0;
+            $tbDetail = Detail::where('kode_transaksi', $request->kode_transaksi);
+            $htgBrg = $tbDetail->count();
             if ($cekError) {
                 // dump('ntoh');
                 foreach ($detailPro as $item) {
@@ -321,12 +326,45 @@ class DetailController extends Controller
                     $detail = Detail::where('kode_barang', '=', $item->kode_barang)->where('kode_transaksi', $request->kode_transaksi)->select('jumlah')->get();
                     $jmlBrg = $detail[0]->jumlah;
                     $jmlStok = $stok[0]->jumlah;
+                    // dd($request->setor_ke);
 
+                    // dd($tes[0]->kode_barang);
+                    // dd([$request->kode_transaksi, $trDtBrg, $kodeBrg])
                     $proses = $jmlStok - $jmlBrg;
-                    // dd($proses);
-                    Stok::where('kode_agen', $item->kode_agen)->where('kode_barang', $item->kode_barang)->update(['jumlah' => $proses]);
-                    Transaksi::where('kode_transaksi', '=', $request->kode_transaksi)->update(['valid' => 1]);
+                    // dump($proses, $item->kode_barang);
+                    $cekStok = Stok::where('kode_barang', '=', $item->kode_barang)->exists();
+                    $errorStok = Parfum::where('kode_barang', $item->kode_barang)->select('kode_barang', 'nama_barang')->get();
+
+                    if ($proses < 0) { //tb stok kosong    //pasti onok bug e
+                        // dd($cekStok);
+                        toast('Jumlah Barang "' . $errorStok[0]->nama_barang . '" yang disetorkan melebihi Jumlah di Stok', 'error')->position('center-end');
+                        // dump($count);
+                        return redirect('/transaksi/detail/' . $request->kode_transaksi);
+                    } else if ($proses >= 0) {
+                        $count++;
+                        if ($htgBrg == $count) {
+                            $jmlStok = true;
+                            // dump($count);
+                        }
+                        // dump([$count, $htgBrg]);
+
+                    }
+
                 }
+            }
+            if ($jmlStok) {
+                foreach ($detailPro as $item) {
+                    $stok = Stok::where('kode_barang', '=', $item->kode_barang)->select('kode_barang', 'jumlah')->get();
+                    $detail = Detail::where('kode_barang', '=', $item->kode_barang)->where('kode_transaksi', $request->kode_transaksi)->select('jumlah')->get();
+                    $jmlBrg = $detail[0]->jumlah;
+                    $jmlStok = $stok[0]->jumlah;
+                    $proses = $jmlStok - $jmlBrg;
+                    dump($proses, $item->kode_barang);
+                    Stok::where('kode_agen', $item->kode_agen)->where('kode_barang', $item->kode_barang)->update(['jumlah' => $proses]);
+
+                }
+                Transaksi::where('kode_transaksi', '=', $request->kode_transaksi)->update(['valid' => 1]);
+
             }
 
         }
