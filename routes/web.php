@@ -3,8 +3,8 @@
 use App\Http\Controllers\AgenController;
 use App\Http\Controllers\Auth_Controller;
 use App\Http\Controllers\Dashboard_Controller;
-use App\Http\Controllers\DetailController;
 use App\Http\Controllers\DetailAgenController;
+use App\Http\Controllers\DetailController;
 use App\Http\Controllers\ParfumController;
 use App\Http\Controllers\StokController;
 use App\Http\Controllers\TransaksiAgen;
@@ -62,12 +62,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/transaksi/detail/tambah', [DetailController::class, 'detailProses']);
 
     Route::post('/transaksi/detail/masuk/{id}', [DetailController::class, 'detailmasuk']);
-    Route::post('/transaksi/detail/setor/{id}', [DetailController::class, 'detailsetor']);
-    Route::post('/transaksi/detail/retur/{id}', [DetailController::class, 'detailretur']);
+
+    // Route::get('/debug', [DetailController::class, 'debug']);
     Route::get('/transaksi/detail/hapus/{transaksiId}/{id}', [DetailController::class, 'detailDelete']);
 
 //transaksi Agen
-Route::get('/transaksi/agen', [TransaksiAgen::class, 'index']);
+    Route::get('/transaksi/agen', [TransaksiAgen::class, 'index']);
     Route::get('/transaksi/agen/tambah', [TransaksiAgen::class, 'create']);
     Route::post('/transaksi/agen/store', [TransaksiAgen::class, 'store']);
     Route::get('/transaksi/agen/detail/{id}', [DetailAgenController::class, 'detailTapil']);
@@ -85,10 +85,10 @@ Route::get('/transaksi/agen', [TransaksiAgen::class, 'index']);
 // Route::get('/transaksi/edit/{id}', [TransaksiPusat::class, 'edit']);
 // Route::put('/transaksi/update/{id}', [TransaksiPusat::class, 'update']);
 //report
-    Route::get('/lapor/transaksi',[TransaksiPusat::class,'laporTampil']);
-    Route::post('/lapor/transaksi',[TransaksiPusat::class,'laporTproses']);
-    Route::get('/lapor/transaksi/cetak',[TransaksiPusat::class,'laporCetak']);
+    Route::get('/lapor/transaksi', [TransaksiPusat::class, 'laporTampil']);
+    Route::post('/lapor/transaksi', [TransaksiPusat::class, 'laporTproses']);
+    Route::get('/lapor/transaksi/cetak', [TransaksiPusat::class, 'laporCetak']);
     Route::get('/lapor/stok', [StokController::class, 'stokTampil']);
     Route::post('/lapor/stok/agen', [StokController::class, 'stokAgen']);
-    Route::get('/lapor/stok/cetak',[StokController::class,'laporCetak']);
+    Route::get('/lapor/stok/cetak', [StokController::class, 'laporCetak']);
 });

@@ -23,11 +23,11 @@
         <div class="panel panel-default" id="panel-editable">
             <div class="panel-heading">
                 <h2>Tabel Stok Pafum</h2>
-                <div class="panel-ctrls"> 
+                {{-- <div class="panel-ctrls"> 
                     <div class="DTTT btn-group pull-left mt-sm mr-3">
                     <a class="btn btn-default DTTT_button_text" id="ToolTables_crudtable_0"href="/parfum/tambah"><i class="ti ti-plus"></i> <span>New</span></a>
                     </div>
-                </div>
+                </div> --}}
             </div>
             <div class="panel-body no-padding">
             
