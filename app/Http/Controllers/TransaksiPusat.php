@@ -6,19 +6,12 @@ use App\Models\Agen;
 use App\Models\Detail;
 use App\Models\Parfum;
 use App\Models\Transaksi;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-<<<<<<< HEAD
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 use PDF;
-=======
-// use PDF;
-use Illuminate\Support\Facades\Schema;
-
->>>>>>> 4248a931b7669935a9d6a8a1f8b49068bdc4db9f
 class TransaksiPusat extends Controller
 {
     public function index()
@@ -142,7 +135,6 @@ class TransaksiPusat extends Controller
 
     public function laporTampil()
     {
-<<<<<<< HEAD
 
         // $transact = Transaksi::join('tb_agen','tb_transaksi.kode_agen','=','tb_agen.kode_agen')
         // ->Where('tb_transaksi.valid','=','1')
@@ -150,19 +142,19 @@ class TransaksiPusat extends Controller
         // ->select('tb_transaksi.*','tb_agen.nama_agen')
         // ->get();
         // dd($transact);
-        $transact = \DB::table('tb_transaksi_detail')
+        $transact = DB::table('tb_transaksi_detail')
         ->join('tb_transaksi','tb_transaksi_detail.kode_transaksi','=','tb_transaksi.kode_transaksi')
         ->join('tb_parfum','tb_parfum.kode_barang','=','tb_transaksi_detail.kode_barang')
         ->Where('tb_transaksi.valid','=','1')
         ->whereMonth('tb_transaksi.tanggal', Carbon::now()->month)
         ->select([
-            \DB::raw('tb_transaksi_detail.kode_barang'),
-            \DB::raw('tb_parfum.nama_barang'),
-            \DB::raw('tb_parfum.h_beli'),
-            \DB::raw('tb_parfum.h_agen'),
-            \DB::raw('sum(jumlah) as total_brg'),
-            \DB::raw('sum(harga) as total_harga'),
-            \DB::raw('tb_transaksi.valid')
+            DB::raw('tb_transaksi_detail.kode_barang'),
+            DB::raw('tb_parfum.nama_barang'),
+            DB::raw('tb_parfum.h_beli'),
+            DB::raw('tb_parfum.h_agen'),
+            DB::raw('sum(jumlah) as total_brg'),
+            DB::raw('sum(harga) as total_harga'),
+            DB::raw('tb_transaksi.valid')
         ])->groupBy('tb_transaksi_detail.kode_barang','tb_parfum.nama_barang','tb_parfum.h_beli','tb_parfum.h_agen','tb_transaksi.valid')
         ->get();
 
@@ -170,12 +162,6 @@ class TransaksiPusat extends Controller
         ->get();
         
         
-=======
-        $transact = Transaksi::join('tb_agen', 'tb_transaksi.kode_agen', '=', 'tb_agen.kode_agen')
-            ->Where('tb_transaksi.valid', '=', '1')
-            ->select('tb_transaksi.*', 'tb_agen.nama_agen')
-            ->get();
->>>>>>> 4248a931b7669935a9d6a8a1f8b49068bdc4db9f
         return view('lapor/transaksi/transaksi', [
             'transact' => $transact,
             'hargaAll' => $hargaAll
@@ -184,11 +170,10 @@ class TransaksiPusat extends Controller
     public function laporTproses(Request $request)
     {
         $tang1 = $request->tanggal1;
-        $newdatefrom = Carbon::createFromFormat('d/m/Y', $tang1)->format('Y-m-d');
+        $newdatefrom = Carbon::createFromFormat('d/m/Y' , $tang1)->format('Y-m-d');
         $date = $request->tanggal2;
-        $newdateto = Carbon::createFromFormat('d/m/Y', $date)->format('Y-m-d');
+        $newdateto = Carbon::createFromFormat('d/m/Y' , $date)->format('Y-m-d');
 
-<<<<<<< HEAD
         // $transact = Transaksi::join('tb_agen','tb_transaksi.kode_agen','=','tb_agen.kode_agen')
         // ->Where('tb_transaksi.valid','=','1')
         // ->whereBetween('tb_transaksi.tanggal',[$newdatefrom,$newdateto])
@@ -204,19 +189,19 @@ class TransaksiPusat extends Controller
         // ->select('tb_transaksi_detail.kode_barang')
         // ->groupBy('tb_transaksi_detail.kode_barang')->get();
 
-        $transact = \DB::table('tb_transaksi_detail')
+        $transact = DB::table('tb_transaksi_detail')
         ->join('tb_transaksi','tb_transaksi_detail.kode_transaksi','=','tb_transaksi.kode_transaksi')
         ->join('tb_parfum','tb_parfum.kode_barang','=','tb_transaksi_detail.kode_barang')
         ->Where('tb_transaksi.valid','=','1')
         ->whereBetween('tb_transaksi.tanggal',[$newdatefrom,$newdateto])
         ->select([
-            \DB::raw('tb_transaksi_detail.kode_barang'),
-            \DB::raw('tb_parfum.nama_barang'),
-            \DB::raw('tb_parfum.h_beli'),
-            \DB::raw('tb_parfum.h_agen'),
-            \DB::raw('sum(jumlah) as total_brg'),
-            \DB::raw('sum(harga) as total_harga'),
-            \DB::raw('tb_transaksi.valid')
+            DB::raw('tb_transaksi_detail.kode_barang'),
+            DB::raw('tb_parfum.nama_barang'),
+            DB::raw('tb_parfum.h_beli'),
+            DB::raw('tb_parfum.h_agen'),
+            DB::raw('sum(jumlah) as total_brg'),
+            DB::raw('sum(harga) as total_harga'),
+            DB::raw('tb_transaksi.valid')
         ])->groupBy('tb_transaksi_detail.kode_barang','tb_parfum.nama_barang','tb_parfum.h_beli','tb_parfum.h_agen','tb_transaksi.valid')
        
         ->get();
@@ -227,16 +212,6 @@ class TransaksiPusat extends Controller
         // ->sum('tb_transaksi_detail.harga');
         
 
-=======
-        $transact = Transaksi::join('tb_agen', 'tb_transaksi.kode_agen', '=', 'tb_agen.kode_agen')
-            ->Where('tb_transaksi.valid', '=', '1')
-            ->whereBetween('tb_transaksi.tanggal', [$newdatefrom, $newdateto])
-        // ->whereDate('tb_transaksi.tanggal', '>=', $deng1)
-        // ->whereDate('tb_transaksi.tanggal', '<=', $newdate)
-        // ->groupBy('tb_transaksi.jenis')
-            ->select('tb_transaksi.*', 'tb_agen.nama_agen')
-            ->get();
->>>>>>> 4248a931b7669935a9d6a8a1f8b49068bdc4db9f
         return view('lapor/transaksi/transaksi', [
             'transact' => $transact,
             
@@ -249,15 +224,15 @@ class TransaksiPusat extends Controller
         // $date = $request->tanggal2;
         // $newdateto = Carbon::createFromFormat('d/m/Y' , $date)->format('Y-m-d');
 
-        $transact = Transaksi::join('tb_agen', 'tb_transaksi.kode_agen', '=', 'tb_agen.kode_agen')
-            ->Where('tb_transaksi.valid', '=', '1')
+        $transact = Transaksi::join('tb_agen','tb_transaksi.kode_agen','=','tb_agen.kode_agen')
+        ->Where('tb_transaksi.valid','=','1')
         // ->whereBetween('tb_transaksi.tanggal',[$newdatefrom,$newdateto])
         // ->whereDate('tb_transaksi.tanggal', '>=', $deng1)
         // ->whereDate('tb_transaksi.tanggal', '<=', $newdate)
         // ->groupBy('tb_transaksi.jenis')
-            ->select('tb_transaksi.*', 'tb_agen.nama_agen')
-            ->get();
-        $pdf = PDF::loadview('lapor.transaksi.transaksi_pdf', ['transaksi' => $transact]);
+        ->select('tb_transaksi.*','tb_agen.nama_agen')
+        ->get();
+        $pdf = PDF::loadview('lapor.transaksi.transaksi_pdf',['transaksi'=>$transact]);
         return $pdf->download('Laporan-Transaksi.pdf');
     }
 }
