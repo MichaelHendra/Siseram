@@ -248,7 +248,7 @@ class DetailController extends Controller
                     // dd([$request->kode_transaksi, $trDtBrg, $kodeBrg])
                     $proses = $jmlStok - $jmlBrg;
                     // dump($proses, $item->kode_barang);
-                    $cekStok = Stok::where('kode_barang', '=', $item->kode_barang)->exists();
+
                     $errorStok = Parfum::where('kode_barang', $item->kode_barang)->select('kode_barang', 'nama_barang')->get();
 
                     if ($proses < 0) { //tb stok kosong    //pasti onok bug e
@@ -315,8 +315,7 @@ class DetailController extends Controller
             // dd($cekError);
             $jmlStok = false;
             $count = 0;
-            $tbDetail = Detail::where('kode_transaksi', $request->kode_transaksi);
-            $htgBrg = $tbDetail->count();
+
             if ($cekError) {
                 // dump('ntoh');
                 foreach ($detailPro as $item) {
@@ -331,12 +330,12 @@ class DetailController extends Controller
                     // dd([$request->kode_transaksi, $trDtBrg, $kodeBrg])
                     $proses = $jmlStok - $jmlBrg;
                     // dump($proses, $item->kode_barang);
-                    $cekStok = Stok::where('kode_barang', '=', $item->kode_barang)->exists();
+
                     $errorStok = Parfum::where('kode_barang', $item->kode_barang)->select('kode_barang', 'nama_barang')->get();
 
                     if ($proses < 0) { //tb stok kosong    //pasti onok bug e
                         // dd($cekStok);
-                        toast('Jumlah Barang "' . $errorStok[0]->nama_barang . '" yang disetorkan melebihi Jumlah di Stok', 'error')->position('center-end');
+                        toast('Jumlah Barang "' . $errorStok[0]->nama_barang . '" yang direturkan melebihi Jumlah di Stok', 'error')->position('center-end');
                         // dump($count);
                         return redirect('/transaksi/detail/' . $request->kode_transaksi);
                     } else if ($proses >= 0) {
@@ -358,7 +357,7 @@ class DetailController extends Controller
                     $jmlBrg = $detail[0]->jumlah;
                     $jmlStok = $stok[0]->jumlah;
                     $proses = $jmlStok - $jmlBrg;
-                    dump($proses, $item->kode_barang);
+                    // dump($proses, $item->kode_barang);
                     Stok::where('kode_agen', $item->kode_agen)->where('kode_barang', $item->kode_barang)->update(['jumlah' => $proses]);
                 }
                 Transaksi::where('kode_transaksi', '=', $request->kode_transaksi)->update(['valid' => 1]);
