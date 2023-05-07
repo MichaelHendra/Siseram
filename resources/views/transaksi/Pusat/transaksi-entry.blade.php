@@ -11,7 +11,7 @@
                 <a class="btn btn-default DTTT_button_text" id="ToolTables_crudtable_0"href="/tes/del"><i class="ti ti-plus"></i> <span>Mess</span></a>
             </div> --}}
             
-            <form action="{{ url('/transaksi/store') }}" class="form-horizontal row-border" method="POST">
+            <form action="{{ url('/transaksi/store') }}" id="transaksi-form" class="form-horizontal row-border" method="POST">
                 @csrf
                 <div class="form-group">
                     <label class="col-md-3 control-label">Kode Agen/Nama Agens</label>
@@ -44,7 +44,7 @@
                 <div class="panel-footer">
                     <div class="row">
                         <div class="col-sm-8 col-sm-offset-2">
-                            <button name="simpan" type="submit" class="btn btn-primary">Submit</button>
+                            <button name="simpan" type="submit" id="tambah-data" class="btn btn-primary">Submit</button>
                         </div>
                     </div>
                 </div>
@@ -64,6 +64,14 @@
             });
         });
 
+    </script>
+@endpush
+
+@push('notif')
+    <script>
+    $('#transaksi-form').on('submit', function () {
+        $("#tambah-data").attr("disabled",true);
+    });
     </script>
 @endpush
 @endsection

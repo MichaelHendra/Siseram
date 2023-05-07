@@ -10,7 +10,8 @@
                 <a class="btn btn-default DTTT_button_text" id="ToolTables_crudtable_0"href="/tes/del"><i class="ti ti-plus"></i> <span>Mess</span></a>
             </div> --}}
             
-            <form action="/transaksi/agen/detail/tambah" class="form-horizontal row-border" method="POST">
+            <form action="/transaksi/agen/detail/tambah" id="barang-form"class="form-horizontal row-border" method="POST">
+                {{-- action="/transaksi/agen/detail/tambah" class="form-horizontal row-border" method="POST" --}}
                 {{-- @method('PUT') --}}
                 @csrf
                 <div class="form-group">
@@ -81,7 +82,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-8 col-sm-offset-2">
-                            <button name="simpan" type="submit" class="btn btn-primary">Tambah Barang</button>
+                            <button id="tambah-barang" name="simpan" type="submit" class="btn btn-primary">Tambah Barang</button>
                         </div>
                     </div> 
                 @endif
@@ -194,7 +195,7 @@
                     <br>
                         <div class="row">
                             <div class="col-sm-8 col-sm-offset-2">
-                                    <button name="simpan" type="submit" class="btn btn-primary btn-valid" data-toggle="tooltip" title='Valid'>Validasi</button>
+                                    <button name="simpan" id = "btn-valid"type="submit" class="btn btn-primary btn-valid" data-toggle="tooltip" title='Valid'>Validasi</button>
                             </div>
                         </div>
                 </form>
@@ -220,6 +221,9 @@
 @endpush
 @push('notif')
 <script>
+    $('#barang-form').on('submit', function () {
+        $("#tambah-barang").attr("disabled",true);
+    });
     $(".btn-valid").click(function(e) {
     var form = $(this).closest("form");
     var name = $(this).data("name");
@@ -233,6 +237,7 @@
     })
     .then((willValid) => {
       if (willValid) {
+        $("#btn-valid").attr("disabled",true);
         form.submit();
       } else {
         swal('Proses Validasi dibatalkan');
@@ -264,7 +269,7 @@ $(".btn-delete").click(function(e) {
           icon: "success",
           });
         // form.submit();
-        console.log(trNum);
+        // console.log(trNum);
       } else {
         swal('Proses Hapus dibatalkan');
       }

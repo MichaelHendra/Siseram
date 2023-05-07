@@ -5,7 +5,7 @@
         <h2>Ubah Data Agen</h2>
     </div>
         <div class="panel-body">
-            <form action="{{ url('/agen/update/' .$agen->kode_agen) }}" class="form-horizontal row-border" method="POST">
+            <form action="{{ url('/agen/update/' .$agen->kode_agen) }}" id="agen-form" class="form-horizontal row-border" method="POST">
                 @csrf
                 @method('PUT')
                 <div class="form-group">
@@ -41,12 +41,18 @@
                 <div class="panel-footer">
                     <div class="row">
                         <div class="col-sm-8 col-sm-offset-2">
-                            <button name="simpan" type="submit" class="btn btn-primary">Submit</button>
+                            <button name="simpan" type="submit" id="tambah-data" class="btn btn-primary">Submit</button>
                         </div>
                     </div>
                 </div>
             </form>
     </div>
 </div>
-
+@push('notif')
+    <script>
+    $('#agen-form').on('submit', function () {
+        $("#tambah-data").attr("disabled",true);
+    });
+    </script>
+@endpush
 @endsection
