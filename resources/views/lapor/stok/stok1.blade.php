@@ -10,7 +10,7 @@
         <form action="/lapor/stok/agen" class="form-horizontal row-border" method="POST">
             @csrf
             <select name="nama" id="selector1" class="form-control">
-                @foreach ($STok1 as $chuu)
+                @foreach ($Agen as $chuu)
                 <option value="{{$chuu->kode_agen}}">{{$chuu->nama_agen}}</option>
                 @endforeach
             </select>
