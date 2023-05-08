@@ -5,7 +5,7 @@
         <h2>Input Data Parfum</h2>
     </div>
         <div class="panel-body">
-            <form action="{{ url('/parfum/store') }}" class="form-horizontal row-border" method="POST">
+            <form action="{{ url('/parfum/store') }}" id="parfum-form" class="form-horizontal row-border" method="POST">
                 @csrf
                 <div class="form-group @error('kode_barang')
                     has-error
@@ -66,12 +66,18 @@
                 <div class="panel-footer">
                     <div class="row">
                         <div class="col-sm-8 col-sm-offset-2">
-                            <button name="simpan" type="submit" class="btn btn-primary">Submit</button>
+                            <button name="simpan" type="submit" id="tambah-data" class="btn btn-primary">Submit</button>
                         </div>
                     </div>
                 </div>
             </form>
     </div>
 </div>
-
+@push('notif')
+    <script>
+    $('#parfum-form').on('submit', function () {
+        $("#tambah-data").attr("disabled",true);
+    });
+    </script>
+@endpush
 @endsection

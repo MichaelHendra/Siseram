@@ -10,7 +10,7 @@
                 <a class="btn btn-default DTTT_button_text" id="ToolTables_crudtable_0"href="/tes/del"><i class="ti ti-plus"></i> <span>Mess</span></a>
             </div> --}}
             
-            <form action="/transaksi/detail/tambah" class="form-horizontal row-border" method="POST">
+            <form action="/transaksi/detail/tambah" id="barang-form" class="form-horizontal row-border" method="POST">
                 {{-- @method('PUT') --}}
                 @csrf
                 <div class="form-group">
@@ -81,7 +81,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-8 col-sm-offset-2">
-                            <button name="simpan" type="submit" class="btn btn-primary">Tambah Barang</button>
+                            <button name="simpan" type="submit" id="tambah-barang" class="btn btn-primary">Tambah Barang</button>
                         </div>
                     </div> 
                 @endif
@@ -209,7 +209,7 @@
                     <br>
                         <div class="row">
                             <div class="col-sm-8 col-sm-offset-2">
-                                    <button name="simpan" type="submit" class="btn btn-primary btn-valid" data-toggle="tooltip" title='Delete'>Validasi</button>
+                                    <button name="simpan" type="submit" id="btn-valid" class="btn btn-primary btn-valid" data-toggle="tooltip" title='Delete'>Validasi</button>
                             </div>
                         </div>
                 </form>
@@ -234,6 +234,7 @@
     </script>
 @endpush
 @push('notif')
+
 <script>
     $(".btn-valid").click(function(e) {
     var form = $(this).closest("form");
@@ -248,6 +249,7 @@
     })
     .then((willValid) => {
       if (willValid) {
+        $("#btn-valid").attr("disabled",true);
         form.submit();
       } else {
         swal('Proses Validasi dibatalkan');
@@ -259,6 +261,9 @@
 @endpush
 @push('alert')
 <script>
+$('#barang-form').on('submit', function () {
+        $("#tambah-barang").attr("disabled",true);
+    });
 $(".btn-delete").click(function(e) {
     var id=$(this).attr('data-deleteid');
     var name=$(this).attr('data-deleteName');
