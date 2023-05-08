@@ -1,5 +1,6 @@
 @extends('layouts.main')
 @section('isi')
+
 <div class="row">
     <div class="col-md-12">
         <div class="alert alert-info">
@@ -17,17 +18,18 @@
             <br>
             <button type="submit" class="btn-primary btn">Cari</button>
             <a href="/lapor/stok/cetak" class="btn btn-primary">Cetak</a>
+            <a href="/lapor/stok/cetak/semua" class="btn btn-primary">Cetak All</a>
         </form>
        
         <br>
         <div class="panel panel-default" id="panel-editable">
             <div class="panel-heading">
                 <h2>Tabel Stok Pafum</h2>
-                {{-- <div class="panel-ctrls"> 
+                <div class="panel-ctrls"> 
                     <div class="DTTT btn-group pull-left mt-sm mr-3">
-                    <a class="btn btn-default DTTT_button_text" id="ToolTables_crudtable_0"href="/parfum/tambah"><i class="ti ti-plus"></i> <span>New</span></a>
+                    <a class="btn btn-default DTTT_button_text" id="ToolTables_crudtable_0"href="/lapor/stok"><i class="ti ti-reload"></i> <span>Refresh</span></a>
                     </div>
-                </div> --}}
+                </div>
             </div>
             <div class="panel-body no-padding">
             
