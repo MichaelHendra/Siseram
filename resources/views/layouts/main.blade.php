@@ -69,7 +69,7 @@
 					<img class="img-circle" src="http://placehold.it/300&text=Placeholder" alt="" />
 				</a>
 				<ul class="dropdown-menu userinfo arrow">
-					<li><a href="#/"><i class="ti ti-user"></i><span>Profile</span></a></li>
+					<li><a href="{{ url('/profile/' .Auth::user()->id) }}"><i class="ti ti-user"></i><span>Profile</span></a></li>
 					<li><a href="#/"><i class="ti ti-settings"></i><span>Settings</span></a></li>
 					{{-- <form action="{{ route('logout') }}" method="POST" class="d-flex" role="search">
 						@csrf

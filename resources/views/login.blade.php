@@ -37,7 +37,7 @@
 						<h2>Login SISERAM</h2>
 					</div>
 					<div class="panel-body">
-						
+						@include('sweetalert::alert')
 						<form action="{{route('loginProses')}}" method="POST" class="form-horizontal" id="validate-form">
                             @csrf
 							<div class="form-group mb-md">

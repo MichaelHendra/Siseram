@@ -5,8 +5,10 @@ namespace App\Exports;
 use App\Models\Stok;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class StokFilter implements FromCollection
+class StokFilter implements FromCollection, WithHeadings, ShouldAutoSize
 {
     /**
      * @return \Illuminate\Support\Collection
@@ -16,6 +18,15 @@ class StokFilter implements FromCollection
     public function __construct(String $kode_agen)
     {
         $this->kode_agen = $kode_agen;
+    }
+    public function headings(): array
+    {
+        return [
+            'Kode Agen',
+            'Nama Agen',
+            'Nama Barang',
+            'Jumlah',
+        ];
     }
     public function collection()
     {

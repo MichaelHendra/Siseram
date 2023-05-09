@@ -4,12 +4,23 @@ namespace App\Exports;
 
 use App\Models\Stok;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class StokAll implements FromCollection
+class StokAll implements FromCollection, WithHeadings, ShouldAutoSize
 {
     /**
      * @return \Illuminate\Support\Collection
      */
+    public function headings(): array
+    {
+        return [
+            'Kode Agen',
+            'Nama Agen',
+            'Nama Barang',
+            'Jumlah',
+        ];
+    }
     public function collection()
     {
         $stok = Stok::join('tb_parfum', 'tb_stok.kode_barang', '=', 'tb_parfum.kode_barang')
