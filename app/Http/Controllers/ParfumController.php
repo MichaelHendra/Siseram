@@ -46,7 +46,9 @@ class ParfumController extends Controller
             'h_beli' => $request->h_beli,
             'h_agen' => $request->h_agen,
         ]);
-        return redirect('/parfum')->with('success', 'Data berhasil ditambahkan');
+        toast('Pafum Berhasil Ditambah', 'success')->position('center-end');
+        return redirect('/parfum');
+        
 
     }
 
@@ -87,6 +89,7 @@ class ParfumController extends Controller
             'h_beli' => $request->h_beli,
             'h_agen' => $request->h_agen,
         ]);
+        toast('Pafum Berhasil Diubah', 'success')->position('center-end');
         return redirect('/parfum')->with('success', 'Data berhasil diubah');
         //
     }

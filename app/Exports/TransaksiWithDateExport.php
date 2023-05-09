@@ -2,14 +2,20 @@
 
 namespace App\Exports;
 
-use Carbon\Carbon;
+use Maatwebsite\Excel\Concerns\Exportable;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class TransaksiExport implements FromCollection,WithHeadings, ShouldAutoSize
+class TransaksiWithDateExport implements FromCollection,WithHeadings, ShouldAutoSize
 {
+    private $newdatefrom;
+    private $newdateto;
+    private $jenis;
+    private $kode_agen;
+
+    use Exportable;
     public function headings(): array
     {
         return [
@@ -21,6 +27,13 @@ class TransaksiExport implements FromCollection,WithHeadings, ShouldAutoSize
             'Sub Total',
         ];
     }
+    public function __construct(string $newdatefrom,string $newdateto,string $jenis, string $kode_agen)
+    {
+        $this->newdatefrom = $newdatefrom;
+        $this->newdateto = $newdateto;
+        $this->jenis = $jenis;
+        $this->kode_agen = $kode_agen;
+    }
     public function collection()
     {
         $transact = DB::table('tb_transaksi_detail')
@@ -28,8 +41,8 @@ class TransaksiExport implements FromCollection,WithHeadings, ShouldAutoSize
         ->join('tb_agen','tb_transaksi.kode_agen','=','tb_agen.kode_agen')
         ->join('tb_parfum','tb_parfum.kode_barang','=','tb_transaksi_detail.kode_barang')
         ->Where('tb_transaksi.valid','=','1')
-        ->where('tb_agen.kode_agen','=', 'PU001')
-        ->whereMonth('tb_transaksi.tanggal', Carbon::now()->month)
+        ->where('tb_transaksi.jenis','=', $this->jenis)
+        ->where('tb_agen.kode_agen','=', $this->kode_agen)
         ->select([
             DB::raw('tb_transaksi_detail.kode_barang'),
             DB::raw('tb_parfum.nama_barang'),

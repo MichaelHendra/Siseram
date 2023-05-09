@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\TransaksiExport;
+use App\Exports\TransaksiWithDateExport;
 use App\Models\Agen;
 use App\Models\Detail;
 use App\Models\Parfum;
@@ -137,17 +138,14 @@ class TransaksiPusat extends Controller
 
     public function laporTampil()
     {
-
-        // $transact = Transaksi::join('tb_agen','tb_transaksi.kode_agen','=','tb_agen.kode_agen')
-        // ->Where('tb_transaksi.valid','=','1')
-        // ->whereMonth('tb_transaksi.tanggal', Carbon::now()->month)
-        // ->select('tb_transaksi.*','tb_agen.nama_agen')
-        // ->get();
-        // dd($transact);
+        $Agen = Agen::distinct('kode_agen')->select('kode_agen', 'nama_agen')->get();
         $transact = DB::table('tb_transaksi_detail')
         ->join('tb_transaksi','tb_transaksi_detail.kode_transaksi','=','tb_transaksi.kode_transaksi')
+        ->join('tb_agen','tb_transaksi.kode_agen','=','tb_agen.kode_agen')
         ->join('tb_parfum','tb_parfum.kode_barang','=','tb_transaksi_detail.kode_barang')
         ->Where('tb_transaksi.valid','=','1')
+        ->where('tb_transaksi.jenis','=','Masuk')
+        ->where('tb_agen.kode_agen','=','PU001')
         ->whereMonth('tb_transaksi.tanggal', Carbon::now()->month)
         ->select([
             DB::raw('tb_transaksi_detail.kode_barang'),
@@ -166,35 +164,25 @@ class TransaksiPusat extends Controller
         
         return view('lapor/transaksi/transaksi', [
             'transact' => $transact,
-            'hargaAll' => $hargaAll
+            'hargaAll' => $hargaAll,
+            'Agen' => $Agen,
         ]);
     }
     public function laporTproses(Request $request)
     {
+        $Agen = Agen::distinct('kode_agen')->select('kode_agen', 'nama_agen')->get();
         $tang1 = $request->tanggal1;
         $newdatefrom = Carbon::createFromFormat('d/m/Y' , $tang1)->format('Y-m-d');
         $date = $request->tanggal2;
         $newdateto = Carbon::createFromFormat('d/m/Y' , $date)->format('Y-m-d');
 
-        // $transact = Transaksi::join('tb_agen','tb_transaksi.kode_agen','=','tb_agen.kode_agen')
-        // ->Where('tb_transaksi.valid','=','1')
-        // ->whereBetween('tb_transaksi.tanggal',[$newdatefrom,$newdateto])
-        // // ->whereDate('tb_transaksi.tanggal', '>=', $deng1)
-        // // ->whereDate('tb_transaksi.tanggal', '<=', $newdate)
-        // // ->groupBy('tb_transaksi.jenis')
-        // ->select('tb_transaksi.*','tb_agen.nama_agen')
-        // ->get();
-
-        // $transact = Detail::join('tb_transaksi','tb_transaksi_detail.kode_transaksi','=','tb_transaksi.kode_transaksi')
-        // ->Where('tb_transaksi.valid','=','1')
-        // ->whereBetween('tb_transaksi.tanggal',[$newdatefrom,$newdateto])
-        // ->select('tb_transaksi_detail.kode_barang')
-        // ->groupBy('tb_transaksi_detail.kode_barang')->get();
-
         $transact = DB::table('tb_transaksi_detail')
         ->join('tb_transaksi','tb_transaksi_detail.kode_transaksi','=','tb_transaksi.kode_transaksi')
+        ->join('tb_agen','tb_transaksi.kode_agen','=','tb_agen.kode_agen')
         ->join('tb_parfum','tb_parfum.kode_barang','=','tb_transaksi_detail.kode_barang')
         ->Where('tb_transaksi.valid','=','1')
+        ->where('tb_transaksi.jenis','=',$request->jenis)
+        ->where('tb_agen.kode_agen','=', $request->namaAgen)
         ->whereBetween('tb_transaksi.tanggal',[$newdatefrom,$newdateto])
         ->select([
             DB::raw('tb_transaksi_detail.kode_barang'),
@@ -204,7 +192,7 @@ class TransaksiPusat extends Controller
             DB::raw('sum(jumlah) as total_brg'),
             DB::raw('sum(harga) as total_harga'),
             DB::raw('tb_transaksi.valid')
-        ])->groupBy('tb_transaksi_detail.kode_barang','tb_parfum.nama_barang','tb_parfum.h_beli','tb_parfum.h_agen','tb_transaksi.valid')
+        ])->groupBy('tb_transaksi_detail.kode_barang','tb_parfum.nama_barang','tb_parfum.h_beli','tb_parfum.h_agen','tb_transaksi.valid','tb_transaksi.jenis')
        
         ->get();
         // dd($transact);
@@ -213,32 +201,27 @@ class TransaksiPusat extends Controller
         //  dd($total);
         // ->sum('tb_transaksi_detail.harga');
         
-
+        session(['newdatefrom' => $newdatefrom]);
+         session(['newdateto'=> $newdateto]);
+         session(['jenis' => $request->jenis]);
+         session(['namaAgen' => $request->namaAgen]);
         return view('lapor/transaksi/transaksi', [
             'transact' => $transact,
+            'Agen' => $Agen,
             
         ]);
     }
-    // public function laporCetak(Request $request)
-    // {
-    //     // $tang1 = $request->tanggal1;
-    //     // $newdatefrom = Carbon::createFromFormat('d/m/Y' , $tang1)->format('Y-m-d');
-    //     // $date = $request->tanggal2;
-    //     // $newdateto = Carbon::createFromFormat('d/m/Y' , $date)->format('Y-m-d');
-
-    //     $transact = Transaksi::join('tb_agen','tb_transaksi.kode_agen','=','tb_agen.kode_agen')
-    //     ->Where('tb_transaksi.valid','=','1')
-    //     // ->whereBetween('tb_transaksi.tanggal',[$newdatefrom,$newdateto])
-    //     // ->whereDate('tb_transaksi.tanggal', '>=', $deng1)
-    //     // ->whereDate('tb_transaksi.tanggal', '<=', $newdate)
-    //     // ->groupBy('tb_transaksi.jenis')
-    //     ->select('tb_transaksi.*','tb_agen.nama_agen')
-    //     ->get();
-    //     $pdf = PDF::loadview('lapor.transaksi.transaksi_pdf',['transaksi'=>$transact]);
-    //     return $pdf->download('Laporan-Transaksi.pdf');
-    // }
     public function export_excel()
 	{
-		return Excel::download(new TransaksiExport, 'Transaksi.xlsx');
+		$newdatefrom = session('newdatefrom');
+        $newdateto = session('newdateto');
+        $jenis = session('jenis');
+        $kode_agen = session('namaAgen');
+        
+		return Excel::download(new TransaksiWithDateExport($newdatefrom,$newdateto,$jenis,$kode_agen), 'Transaksi Dengan Filter.xlsx');
 	}
+    public function export_excel_all()
+    {
+        return Excel::download(new TransaksiExport, 'Semua Transaksi Bulan ini.xlsx');
+    }
 }

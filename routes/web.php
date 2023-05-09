@@ -89,7 +89,8 @@ Route::group(['middleware' => 'auth'], function () {
 //report
     Route::get('/lapor/transaksi', [TransaksiPusat::class, 'laporTampil']);
     Route::post('/lapor/transaksi', [TransaksiPusat::class, 'laporTproses']);
-    Route::get('/lapor/transaksi/cetak', [TransaksiPusat::class, 'export_excel']);
+    Route::get('/lapor/transaksi/cetak', [TransaksiPusat::class, 'export_excel_all']);
+    Route::get('/lapor/transaksi/cetak/filter', [TransaksiPusat::class, 'export_excel']);
     Route::get('/lapor/stok', [StokController::class, 'stokTampil']);
     Route::post('/lapor/stok/agen', [StokController::class, 'stokAgen']); //cari
     Route::get('/lapor/stok/cetak', [StokController::class, 'export_excel']);

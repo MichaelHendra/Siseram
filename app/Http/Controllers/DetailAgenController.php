@@ -98,14 +98,15 @@ class DetailAgenController extends Controller
 
     public function detailAgenMasuk(Request $request) // fungsi proses barang untuk agen 
     {
-        // $nyoba = Detail::select('kode_barang')->where('kode_transaksi', $request->kode_transaksi)->get();
-
+        $cekDetail = Detail::where('kode_transaksi', $request->kode_transaksi)->get();
+        if($cekDetail->isEmpty()){
+            toast('Mohon Untuk Mengisi Barang Terlebih Dahulu', 'error')->position('center-end');
+            return redirect('/transaksi/agen/detail/' . $request->kode_transaksi);
+        }else{
         $detailPro = Detail::join('tb_transaksi', 'tb_transaksi.kode_transaksi', '=', 'tb_transaksi_detail.kode_transaksi')
             ->Where('tb_transaksi_detail.kode_transaksi', $request->kode_transaksi)
             ->select('tb_transaksi.kode_agen', 'tb_transaksi.jenis', 'tb_transaksi_detail.kode_barang', 'tb_transaksi_detail.jumlah')->get();
-        
         $stok = Stok::where('kode_barang', '=', $detailPro[0]->kode_barang)->select('kode_barang', 'jumlah')->get()->first();
-        // $tbStok = Stok::select('kode_agen')->get()->first();
         $tbStok = Stok::where('kode_agen','=','PU001')->get();
         $tbStokAgen = Stok::where('kode_agen','=',$request->setor_ke)->get(); 
         //dd($tbStokAgen);
@@ -396,4 +397,5 @@ class DetailAgenController extends Controller
         }
         return redirect('/transaksi/agen/')->with('success', 'Data berhasil ditambahkan');
     }
+}
 }

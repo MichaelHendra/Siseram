@@ -23,24 +23,42 @@
                         <div class="col-sm-8">
                             <div class="input-daterange input-group" id="datepicker-range">
                                 <input class="form-control datepicker" name="tanggal1"type="text" id="dtp-1">
-                                <span class="input-group-addon">to</span>
+                                <span class="input-group-addon">Sampai</span>
                                 <input class="form-control datepicker" name="tanggal2"type="text" id="dtp-2">
-                                <span class="input-group-addon"></span>
-                                {{-- @if ($newdatefrom = null)
-                                <input class="form-control datepicker" name="hidden1"type="hidden" id="dtp-1" value="{{ $newdatefrom }}">
-                                <input class="form-control datepicker" name="hidden2"type="hidden" id="dtp-1" value="{{ $newdateto }}">
-                                @else
-                                
-                                @endif --}}
-                                
-                                <button class="form-control btn btn-primary" type="submit">Cari</button>
                             </div>
                         
                         </div>
-                    </form>
-                    <a href="/lapor/transaksi/cetak" class="btn btn-primary">Cetak</a>
+                        <a href="/lapor/transaksi/cetak/filter" class="btn btn-primary">Cetak</a>
+                        <a href="/lapor/transaksi/cetak" class="btn btn-primary">Cetak All</a>
+                        
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Jenis Transaksi</label>
+                    <div class="col-sm-3">
+                            <select name="jenis" id="selector1" class="form-control">
+                                {{-- @foreach ($Agen as $chuu) --}}
+                                <option value="Masuk">Masuk</option>
+                                <option value="Setor">Setor</option>
+                                <option value="Retur">Retur</option>
+                            </select>
+                            <br>
+                            <button class="btn btn-primary" type="submit">Cari</button>
                     </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-1 control-label">Nama Agen</label>
+                    <div class="col-sm-3">
+                        <select name="namaAgen" id="selector1" class="form-control">
+                            @foreach ($Agen as $chuu)
+                            <option value="{{ $chuu->kode_agen }}">{{$chuu->nama_agen}}</option>
+                            @endforeach
+                        </select>
+                        <br>
+                    </div>
+                </div>
+                </form>
             </div>
+        </div>
            
             <div class="panel-body no-padding">
             

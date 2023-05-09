@@ -42,6 +42,7 @@ class AgenController extends Controller
             'nama_agen' => $request->nama_agen,
             'status' => $request->status,
         ]);
+        toast('Agen Berhasil Ditambah', 'success')->position('center-end');
         return redirect('/agen')->with('success', 'Data berhasil ditambahkan');
 
     }
@@ -80,6 +81,7 @@ class AgenController extends Controller
             'nama_agen' => $request->nama_agen,
             'status' => $request->status,
         ]);
+        toast('Pafum Berhasil Diubah', 'success')->position('center-end');
         return redirect('/agen')->with('success', 'Data berhasil diubah');
         //
     }
