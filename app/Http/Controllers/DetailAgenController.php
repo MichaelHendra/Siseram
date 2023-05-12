@@ -26,10 +26,11 @@ class DetailAgenController extends Controller
         ->get('tb_agen.kode_agen');
         //   dd($war69);
         $barang = Parfum::all();
-
+        
         // $list = Detail::join('tb_parfum','tb_parfum.kode_barang','=','tb_transaksi_detail.kode_barang')
         // ->select('tb_transaksi_detail.*','tb_parfum.nama_barang')
         // ->get();
+
         $Pusat = Agen::where('status','=','1')->get();
         $viewDetailbarang = Detail::join('tb_transaksi', 'tb_transaksi.kode_transaksi', '=', 'tb_transaksi_detail.kode_transaksi')
         ->join('tb_parfum', 'tb_transaksi_detail.kode_barang', '=', 'tb_parfum.kode_barang')

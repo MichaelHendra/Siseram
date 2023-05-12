@@ -22,9 +22,9 @@
                         <label class="col-sm-2 control-label">Jangka Tanggal Transaksi</label>
                         <div class="col-sm-8">
                             <div class="input-daterange input-group" id="datepicker-range">
-                                <input class="form-control datepicker" name="tanggal1"type="text" id="dtp-1">
+                                <input class="form-control datepicker" name="tanggal1"type="text" id="dtp-1" value="{{ $today }}">
                                 <span class="input-group-addon">Sampai</span>
-                                <input class="form-control datepicker" name="tanggal2"type="text" id="dtp-2">
+                                <input class="form-control datepicker" name="tanggal2"type="text" id="dtp-2" value="{{ $today }}">
                             </div>
                         
                         </div>
@@ -66,7 +66,8 @@
                     <thead class="text-center">
                         <tr>
                             <th class="text-center" width="5%">No</th>
-                            <th class="text-center" width="30%">Kode Barang</th>
+                            <th class="text-center" width="30%">Nama Agen</th>
+                            <th class="text-center" width="10%">Kode Barang</th>
                             <th class="text-center" width="20%">Nama Barang</th>
                             <th class="text-center" width="20%">Jumlah</th>
                             <th class="text-center" width="10%">Harga Pusat</th>
@@ -106,6 +107,7 @@
                         @endforelse --}}
                         <tr>
                             <td>{{ $loop->iteration}}</td>
+                            <td>{{ $t->nama_agen }}</td>
                             <td>{{ $t->kode_barang }}</td>
                             <td>{{ $t->nama_barang }}</td>
                             {{-- <td class="date" data-date="{{ $t->tanggal }}">{{ $t->tanggal}}</td> --}}

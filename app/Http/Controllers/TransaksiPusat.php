@@ -138,6 +138,7 @@ class TransaksiPusat extends Controller
 
     public function laporTampil()
     {
+        $today = Carbon::today()->format('d/m/Y');
         $Agen = Agen::distinct('kode_agen')->select('kode_agen', 'nama_agen')->get();
         $transact = DB::table('tb_transaksi_detail')
         ->join('tb_transaksi','tb_transaksi_detail.kode_transaksi','=','tb_transaksi.kode_transaksi')
@@ -152,10 +153,11 @@ class TransaksiPusat extends Controller
             DB::raw('tb_parfum.nama_barang'),
             DB::raw('tb_parfum.h_beli'),
             DB::raw('tb_parfum.h_agen'),
+            DB::raw('tb_agen.nama_agen'),
             DB::raw('sum(jumlah) as total_brg'),
             DB::raw('sum(harga) as total_harga'),
             DB::raw('tb_transaksi.valid')
-        ])->groupBy('tb_transaksi_detail.kode_barang','tb_parfum.nama_barang','tb_parfum.h_beli','tb_parfum.h_agen','tb_transaksi.valid')
+        ])->groupBy('tb_transaksi_detail.kode_barang','tb_parfum.nama_barang','tb_parfum.h_beli','tb_parfum.h_agen','tb_transaksi.valid','tb_agen.nama_agen')
         ->get();
 
         $hargaAll = Parfum::join('tb_transaksi_detail','tb_transaksi_detail.kode_barang','=','tb_parfum.kode_barang')
@@ -166,10 +168,12 @@ class TransaksiPusat extends Controller
             'transact' => $transact,
             'hargaAll' => $hargaAll,
             'Agen' => $Agen,
+            'today' => $today,
         ]);
     }
     public function laporTproses(Request $request)
     {
+        $today = Carbon::today()->format('d/m/Y');
         $Agen = Agen::distinct('kode_agen')->select('kode_agen', 'nama_agen')->get();
         $tang1 = $request->tanggal1;
         $newdatefrom = Carbon::createFromFormat('d/m/Y' , $tang1)->format('Y-m-d');
@@ -187,27 +191,23 @@ class TransaksiPusat extends Controller
         ->select([
             DB::raw('tb_transaksi_detail.kode_barang'),
             DB::raw('tb_parfum.nama_barang'),
+            DB::raw('tb_agen.nama_agen'),
             DB::raw('tb_parfum.h_beli'),
             DB::raw('tb_parfum.h_agen'),
             DB::raw('sum(jumlah) as total_brg'),
             DB::raw('sum(harga) as total_harga'),
             DB::raw('tb_transaksi.valid')
-        ])->groupBy('tb_transaksi_detail.kode_barang','tb_parfum.nama_barang','tb_parfum.h_beli','tb_parfum.h_agen','tb_transaksi.valid','tb_transaksi.jenis')
-       
+        ])->groupBy('tb_transaksi_detail.kode_barang','tb_parfum.nama_barang','tb_parfum.h_beli','tb_parfum.h_agen','tb_transaksi.valid','tb_transaksi.jenis','tb_agen.nama_agen')
         ->get();
         // dd($transact);
-        // dd($transact);
-        // $total = $transact->sum('jumlah');
-        //  dd($total);
-        // ->sum('tb_transaksi_detail.harga');
-        
-        session(['newdatefrom' => $newdatefrom]);
+         session(['newdatefrom' => $newdatefrom]);
          session(['newdateto'=> $newdateto]);
          session(['jenis' => $request->jenis]);
          session(['namaAgen' => $request->namaAgen]);
         return view('lapor/transaksi/transaksi', [
             'transact' => $transact,
             'Agen' => $Agen,
+            'today' => $today,
             
         ]);
     }
